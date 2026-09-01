@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EpopeyApp - Inicio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class ="container">
+    <h1>El padel comienza en Epopeya</h1>
+</main>
+<header>
+    <img src="logo.png" alt="Equipo Logo">
+    <button id="logout">Desconectar</button>
+</header>
+<nav>
+    <a href="#usuarios">Jugadores</a>
+    <a href="#ranking">Clasificación</a>
+    <a href="#jornadas">Jornadas</a>
+    <a href="voto-fecha">Elección de fechas</a>
+    <a href="#disponibilidad">Disponibilidad</a>
+    <a href="#convocatoria">Convocatoria</a>
+    <a href="estadisticas">Estadísticas</a>
+</nav>
+<main>
+    <section id="usuarios">
+        <h2>Jugadores</h2>
+        <button id="add-usuario">Añadir jugador</button>
+        <ul id="usuario-lista"></ul>
+    </section>
+    <section id="voto-fecha">
+        <h2>Elección de fechas</h2>
+        <form id="date-poll-form">
+            <input type="text" id="poll-name" placeholder="Nombre de la encuesta">
+            <input type="text" id="opponent" placeholder="Contrincante">
+            <button type="submit">Enviar</button>
+        </form>
+        <ul id="date-poll.list"></ul>
+    </section>
+    <section id="disponibilidad">
+        <h2>Disponibilidad</h2>
+        <ul id="lista-disponibilidad"></ul>
+    </section>
+    <section id="estadisticas">
+        <h2>Estadísticas</h2>
+        <ul id="lista-estadisticas"></ul>
+    </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

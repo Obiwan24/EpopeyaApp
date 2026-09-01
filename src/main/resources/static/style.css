@@ -1,0 +1,75 @@
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #0d0d0d; /* fondo negro */
+    color: #ffffff;
+
+    /* Fondo atigrado fluido*/
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%230d0d0d"/><path d="M0,30 Q40,10 90,40 T180,20 T270,50 T300,35 L300,65 Q260,80 200,50 T110,75 T20,45T0,60 Z M-10,120 Q50,100 110,130 T220,110 T310,145 L310,175 Q240,150 160,180 T70,140 T-10,155 Z M0,220 Q60,190 130,230 T240,200 T300,240 L300,270 Q230,240 140,275 T50,230 T0,250 Z" fill="%23e66a00" opacity="0.95"/><path d="M20,10 Q70,30 130,10 T250,40 L250,55 Q180,30 110,50 T20,25 Z M-10,100 Q60,70 140,105 T280,85 L280,100 Q190,130 100,90 T-10,115 Z M10,190 Q80,170 160,200 T290,180 L290,195 Q200,220 110,185 T10,205 Z" fill="%23ff9214" opacity="0.8"/></svg>');
+
+    background-repeat: repeat;
+    background-size: 320px 320px; /*Tamaño del patron de piel */
+}
+
+/* Ejemplo de tarjeta translucida para que resalte el contenido sobre el fondo */
+.container {
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 24px;
+    background: rgba(18, 18, 18, 0.85); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(10px); /* Efecto cristal desenfocado */
+    border-radius: 16px;
+    border: 1px solid rgba(255, 146, 20, 0.3); /* Borde naranja sutil */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+header {
+    background-color: #333;
+    color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav {
+    background-color: #444;
+    padding: 10px 20px;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li{
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #777;
+}
