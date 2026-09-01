@@ -45,6 +45,15 @@ public class Usuario {
     public String getTlfn() {return tlfn;}
     public void setTlfn(String tlfn) {this.tlfn = tlfn;}
 
+    public String getUsername() {return username;}
+    public void setUsername(String username) {this.username = username;}
+
+    public String getPassword() {return password;}
+    public void setPassword(String password) {this.password = password;}
+
+    public LocalDate getFechaNacimiento() {return fechaNacimiento;}
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {this.fechaNacimiento = fechaNacimiento;}
+
     public Posicion getPosicion() {return posicion;}
     public void setPosicion(Posicion posicion) {this.posicion = posicion;}
 }
