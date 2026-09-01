@@ -21,7 +21,6 @@ public class Usuario {
     private String tlfn;
     private LocalDate fechaNacimiento;
     private Posicion posicion;
-    private enum rol;
 
     //Getters y Setters
 
