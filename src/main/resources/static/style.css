@@ -1,75 +1,234 @@
+:root {
+    --color-primario: #1b5e3a;
+    --color-primario-oscuro: #123f27;
+    --color-acento: #f2a900;
+    --color-fondo: #f5f6f8;
+    --color-tarjeta: #ffffff;
+    --color-texto: #22282e;
+    --color-texto-suave: #667085;
+    --color-borde: #e3e6ea;
+    --color-exito: #1b8a4c;
+    --color-aviso: #d94b4b;
+    --color-pendiente: #9aa1a9;
+    --radio: 12px;
+    --sombra: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background-color: #0d0d0d; /* fondo negro */
-    color: #ffffff;
-
-    /* Fondo atigrado fluido*/
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%230d0d0d"/><path d="M0,30 Q40,10 90,40 T180,20 T270,50 T300,35 L300,65 Q260,80 200,50 T110,75 T20,45T0,60 Z M-10,120 Q50,100 110,130 T220,110 T310,145 L310,175 Q240,150 160,180 T70,140 T-10,155 Z M0,220 Q60,190 130,230 T240,200 T300,240 L300,270 Q230,240 140,275 T50,230 T0,250 Z" fill="%23e66a00" opacity="0.95"/><path d="M20,10 Q70,30 130,10 T250,40 L250,55 Q180,30 110,50 T20,25 Z M-10,100 Q60,70 140,105 T280,85 L280,100 Q190,130 100,90 T-10,115 Z M10,190 Q80,170 160,200 T290,180 L290,195 Q200,220 110,185 T10,205 Z" fill="%23ff9214" opacity="0.8"/></svg>');
-
-    background-repeat: repeat;
-    background-size: 320px 320px; /*Tamaño del patron de piel */
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--color-fondo);
+    color: var(--color-texto);
 }
 
-/* Ejemplo de tarjeta translucida para que resalte el contenido sobre el fondo */
-.container {
-    max-width: 480px;
-    margin: 40px auto;
-    padding: 24px;
-    background: rgba(18, 18, 18, 0.85); /* Fondo oscuro semitransparente */
-    backdrop-filter: blur(10px); /* Efecto cristal desenfocado */
-    border-radius: 16px;
-    border: 1px solid rgba(255, 146, 20, 0.3); /* Borde naranja sutil */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+header.cabecera {
+    background: var(--color-primario);
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-header {
-    background-color: #333;
-    color: #ffffff;
-    padding: 10px 20px;
+header.cabecera .titulo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+header.cabecera img.logo {
+    height: 36px;
+    width: 36px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: white;
+}
+
+header.cabecera .icono-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 6px;
+}
+
+main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+}
+
+.tarjeta {
+    background: var(--color-tarjeta);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: 18px 20px;
+    margin-bottom: 16px;
+}
+
+.login-contenedor {
+    max-width: 380px;
+    margin: 60px auto;
+    text-align: center;
+}
+
+.login-contenedor .logo-login {
+    height: 90px;
+    margin-bottom: 20px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 12px;
+    background: white;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
+    margin-bottom: 4px;
+}
+
+button.btn {
+    background: var(--color-primario);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+button.btn:hover {
+    background: var(--color-primario-oscuro);
+}
+
+button.btn.secundario {
+    background: white;
+    color: var(--color-primario);
+    border: 1px solid var(--color-primario);
+}
+
+button.btn.peligro {
+    background: var(--color-aviso);
+}
+
+button.btn.acento {
+    background: var(--color-acento);
+    color: #3a2a00;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: var(--color-primario);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.grid-menu {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.grid-menu button {
+    height: 90px;
+    font-size: 1rem;
+    border-radius: var(--radio);
+}
+
+.lista-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.lista-item:last-child {
+    border-bottom: none;
+}
+
+.etiqueta {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.etiqueta.finalizada, .etiqueta.finalizado {
+    background: var(--color-exito);
+}
+
+.etiqueta.aplazada, .etiqueta.aplazado {
+    background: var(--color-aviso);
+}
+
+.etiqueta.pendiente {
+    background: var(--color-pendiente);
+}
+
+.etiqueta.en_juego {
+    background: var(--color-acento);
+    color: #3a2a00;
+}
+
+.etiqueta.no_presentado {
+    background: #6b7280;
+}
+
+.jornada-card {
+    cursor: pointer;
+}
+
+.jornada-card .cabecera-jornada {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-nav {
-    background-color: #444;
-    padding: 10px 20px;
+.partido-item {
+    background: var(--color-fondo);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 8px;
 }
 
-nav a {
-    color: #ffffff;
-    text-decoration: none;
-    margin: 0 10px;
-}
-
-main {
-    padding: 20px;
-}
-
-section {
-    margin-bottom: 20px;
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li{
+.error-msg {
+    color: var(--color-aviso);
+    font-size: 0.9rem;
+    margin-top: -6px;
     margin-bottom: 10px;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #555;
-    color: #fff;
-    border: none;
-    cursor: pointer;
+.oculto {
+    display: none !important;
 }
 
-button:hover {
-    background-color: #777;
+.acciones-fila {
+    display: flex;
+    gap: 8px;
+}
+
+.acciones-fila button {
+    padding: 6px 10px;
+    font-size: 0.85rem;
 }

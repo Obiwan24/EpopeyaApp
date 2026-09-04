@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="cabecera">
+    <div class="titulo">
+        <button class="icono-btn" onclick="history.back()">←</button>
+        <img src="/assets/img/logo.png" class="logo" alt="Logo">
+        <span>Estadísticas</span>
+    </div>
+    <button class="icono-btn" onclick="location.href='/pages/perfil.html'">👤</button>
+</header>
+
+<main>
+    <table style="width:100%; border-collapse:collapse;" id="tabla-estadisticas">
+        <thead>
+        <tr style="text-align:left; border-bottom:2px solid var(--color-borde);">
+            <th style="padding:8px;">Jugador</th>
+            <th>Disp.</th>
+            <th>Conv.</th>
+            <th>Ganados</th>
+            <th>Perdidos</th>
+            <th>Sets</th>
+            <th>Juegos</th>
+        </tr>
+        </thead>
+        <tbody id="cuerpo-estadisticas"></tbody>
+    </table>
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/estadisticas.js"></script>
+</body>
+</html>

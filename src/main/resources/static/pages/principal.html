@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epopeya App</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="cabecera">
+    <div class="titulo">
+        <img src="/assets/img/logo.png" class="logo" alt="Logo">
+        <span>Epopeya Pádel</span>
+    </div>
+    <div>
+        <button class="icono-btn" id="btn-usuario" title="Mi perfil">👤</button>
+        <button class="icono-btn" id="btn-logout" title="Cerrar sesión">⏻</button>
+    </div>
+</header>
+
+<main>
+    <div class="grid-menu" id="grid-menu">
+        <button class="btn oculto" id="btn-jugadores">👥<br>Jugadores</button>
+        <button class="btn">🏆<br>Clasificación</button>
+        <button class="btn" id="btn-jornadas">📅<br>Jornadas</button>
+        <button class="btn" id="btn-elecciones">🗳️<br>Elección de fechas</button>
+        <button class="btn" id="btn-disponibilidad">✅<br>Disponibilidad</button>
+        <button class="btn" id="btn-convocatoria">📋<br>Convocatoria</button>
+        <button class="btn" id="btn-estadisticas">📊<br>Estadísticas</button>
+    </div>
+</main>
+
+<script src="/js/api.js"></script>
+<script>
+    exigirSesion();
+    const usuario = getUsuarioActual();
+
+    if (usuario && usuario.rol === "CAPITAN") {
+        document.getElementById("btn-jugadores").classList.remove("oculto");
+    }
+
+    document.getElementById("btn-usuario").addEventListener("click", () => irA("perfil.html"));
+    document.getElementById("btn-logout").addEventListener("click", () => {
+        clearSesion();
+        window.location.href = "/index.html";
+    });
+
+    document.getElementById("btn-jugadores")?.addEventListener("click", () => irA("jugadores.html"));
+    document.getElementById("btn-jornadas").addEventListener("click", () => irA("jornadas.html"));
+    document.getElementById("btn-elecciones").addEventListener("click", () => irA("elecciones.html"));
+    document.getElementById("btn-disponibilidad").addEventListener("click", () => irA("disponibilidad.html"));
+    document.getElementById("btn-convocatoria").addEventListener("click", () => irA("convocatoria.html"));
+    document.getElementById("btn-estadisticas").addEventListener("click", () => irA("estadisticas.html"));
+</script>
+</body>
+</html>

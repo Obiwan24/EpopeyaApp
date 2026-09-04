@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugadores</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="cabecera">
+    <div class="titulo">
+        <button class="icono-btn" onclick="history.back()">←</button>
+        <img src="/assets/img/logo.png" class="logo" alt="Logo">
+        <span>Jugadores</span>
+    </div>
+    <button class="icono-btn" onclick="location.href='/pages/perfil.html'">👤</button>
+</header>
+
+<main>
+    <button class="btn" id="btn-nuevo" style="margin-bottom:14px;">+ Añadir jugador</button>
+    <div id="lista-jugadores"></div>
+</main>
+
+<!-- Modal alta / edición -->
+<div id="modal-jugador" class="oculto" style="position:fixed; inset:0; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; overflow:auto; padding:20px;">
+    <div class="tarjeta" style="max-width:420px; width:100%;">
+        <h3 id="titulo-modal">Nuevo jugador</h3>
+        <form id="form-jugador">
+            <input type="hidden" id="jugador-id">
+
+            <label>Nombre</label>
+            <input type="text" id="jugador-nombre" required>
+
+            <label>Apellidos</label>
+            <input type="text" id="jugador-apellidos" required>
+
+            <label>DNI</label>
+            <input type="text" id="jugador-dni" required>
+
+            <label>Teléfono</label>
+            <input type="text" id="jugador-telefono">
+
+            <label>Email</label>
+            <input type="email" id="jugador-email">
+
+            <label>Fecha de nacimiento</label>
+            <input type="date" id="jugador-fecha-nacimiento" required>
+
+            <label>Posición</label>
+            <select id="jugador-posicion">
+                <option value="DRIVE">Drive</option>
+                <option value="REVES">Revés</option>
+                <option value="AMBOS">Ambos</option>
+            </select>
+
+            <p class="error-msg" id="error-jugador"></p>
+
+            <div class="acciones-fila">
+                <button type="submit" class="btn">Guardar</button>
+                <button type="button" class="btn secundario" id="cancelar-modal">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/jugadores.js"></script>
+</body>
+</html>

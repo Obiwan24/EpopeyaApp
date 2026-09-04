@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disponibilidad</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="cabecera">
+    <div class="titulo">
+        <button class="icono-btn" onclick="history.back()">←</button>
+        <img src="/assets/img/logo.png" class="logo" alt="Logo">
+        <span>Disponibilidad</span>
+    </div>
+    <button class="icono-btn" onclick="location.href='/pages/perfil.html'">👤</button>
+</header>
+
+<main>
+    <button class="btn oculto" id="btn-nueva-jornada" style="margin-bottom:14px;">+ Añadir jornada</button>
+    <div id="lista-disponibilidad"></div>
+</main>
+
+<div id="detalle-disponibilidad" class="oculto"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/disponibilidad.js"></script>
+</body>
+</html>

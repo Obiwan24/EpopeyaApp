@@ -1,53 +1,298 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EpopeyApp - Inicio</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Acceso - Olimpo App</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fuentes estilo clásico griego (Cinzel) y legible (Lato) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Fondo con la imagen guardada en assets/img/fondo.jpg */
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #1a1612 url('assets/img/fondo.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        /* Capa oscura suave sobre el fondo para resaltar la tarjeta */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(20, 16, 12, 0.45);
+            z-index: 0;
+        }
+
+        /* Tarjeta de Login centrada y desplazada ligeramente hacia arriba */
+        .login-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            background: rgba(253, 250, 243, 0.94); /* Tono pergamino / mármol suave */
+            border: 2px solid #c5a059; /* Borde de bronce / dorado */
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(197, 160, 89, 0.3);
+            padding: 2.5rem 2rem;
+            margin-top: -30px; /* Ligera elevación respecto al centro */
+        }
+
+        /* Contenedor del Logo (assets/img/logo.jpg) */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-img {
+            max-width: 110px;
+            height: auto;
+            border-radius: 50%;
+            border: 3px solid #c5a059;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 3px;
+            background: #fff;
+        }
+
+        /* Etiquetas y Campos de entrada */
+        .form-label {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            color: #3a2e21;
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-control {
+            border: 1.5px solid #bd9b53;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 6px;
+            padding: 0.65rem 0.85rem;
+            color: #2b2118;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: #ffffff;
+            border-color: #8c6d2d;
+            box-shadow: 0 0 8px rgba(197, 160, 89, 0.5);
+            outline: none;
+        }
+
+        /* Checkbox y Texto "Recordar usuario y contraseña" */
+        .form-check-label {
+            color: #4a3b2c;
+            font-size: 0.9rem;
+            user-select: none;
+        }
+
+        .form-check-input:checked {
+            background-color: #c5a059;
+            border-color: #8c6d2d;
+        }
+
+        /* Enlace "Recordar contraseña" */
+        .forgot-link {
+            color: #8c6d2d;
+            font-family: 'Cinzel', serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: #594319;
+            text-decoration: underline;
+        }
+
+        /* Botón estilo Dorado / Bronce */
+        .btn-greek {
+            background: linear-gradient(135deg, #c5a059 0%, #9e7a37 100%);
+            color: #ffffff;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 1.5px;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-greek:hover {
+            background: linear-gradient(135deg, #d4af66 0%, #ad8741 100%);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        /* Ventana Emergente (Modal) */
+        .modal-content {
+            background: #fdfaf3;
+            border: 2px solid #c5a059;
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #e2d2b0;
+            background: #f4ebd9;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            color: #3a2e21;
+            font-weight: 700;
+        }
+    </style>
 </head>
 <body>
-<main class ="container">
-    <h1>El padel comienza en Epopeya</h1>
-</main>
-<header>
-    <img src="logo.png" alt="Equipo Logo">
-    <button id="logout">Desconectar</button>
-</header>
-<nav>
-    <a href="#usuarios">Jugadores</a>
-    <a href="#ranking">Clasificación</a>
-    <a href="#jornadas">Jornadas</a>
-    <a href="voto-fecha">Elección de fechas</a>
-    <a href="#disponibilidad">Disponibilidad</a>
-    <a href="#convocatoria">Convocatoria</a>
-    <a href="estadisticas">Estadísticas</a>
-</nav>
-<main>
-    <section id="usuarios">
-        <h2>Jugadores</h2>
-        <button id="add-usuario">Añadir jugador</button>
-        <ul id="usuario-lista"></ul>
-    </section>
-    <section id="voto-fecha">
-        <h2>Elección de fechas</h2>
-        <form id="date-poll-form">
-            <input type="text" id="poll-name" placeholder="Nombre de la encuesta">
-            <input type="text" id="opponent" placeholder="Contrincante">
-            <button type="submit">Enviar</button>
-        </form>
-        <ul id="date-poll.list"></ul>
-    </section>
-    <section id="disponibilidad">
-        <h2>Disponibilidad</h2>
-        <ul id="lista-disponibilidad"></ul>
-    </section>
-    <section id="estadisticas">
-        <h2>Estadísticas</h2>
-        <ul id="lista-estadisticas"></ul>
-    </section>
-</main>
-<script src="app.js"></script>
+
+<!-- TARJETA PRINCIPAL DE LOGIN -->
+<div class="login-card">
+
+    <!-- 1. Logo del Equipo (assets/img/logo.jpg) -->
+    <div class="logo-container">
+        <img src="assets/img/logo.jpeg" alt="Logo Equipo" class="logo-img">
+    </div>
+
+    <form id="loginForm">
+        <!-- 2. Campos de Usuario y Contraseña -->
+        <div class="mb-3">
+            <label for="usuario" class="form-label">Usuario</label>
+            <input type="text" class="form-control" id="usuario" placeholder="Introduce tu usuario" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Introduce tu contraseña" required>
+        </div>
+
+        <!-- 3. Opción: Recordar usuario y contraseña -->
+        <div class="mb-2 form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">Recordar usuario y contraseña</label>
+        </div>
+
+        <!-- 4. Texto seleccionable: Recuperar contraseña -->
+        <div class="mb-4 text-end">
+                <span class="forgot-link" data-bs-toggle="modal" data-bs-target="#recoverModal">
+                    Recuperar contraseña
+                </span>
+        </div>
+
+        <!-- 5. Botón Entrar -->
+        <button type="submit" class="btn btn-greek">ENTRAR</button>
+    </form>
+</div>
+
+<!-- VENTANA EMERGENTE (MODAL) PARA RECUPERAR CONTRASEÑA -->
+<div class="modal fade" id="recoverModal" tabindex="-1" aria-labelledby="recoverModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recoverModalLabel">Recuperar Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="recoverForm">
+                    <!-- Campo Superior: Usuario -->
+                    <div class="mb-3">
+                        <label for="recoverUser" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="recoverUser" placeholder="Introduce tu usuario" required>
+                    </div>
+                    <!-- Campo Inferior: Email -->
+                    <div class="mb-3">
+                        <label for="recoverEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="recoverEmail" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    <!-- Botón Recuperar Contraseña -->
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-greek">RECUPERAR CONTRASEÑA</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts de Bootstrap y Lógica JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Verificación inicial: Si el usuario activó "Recordar", pasa a principal.html
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('rememberUser') === 'true') {
+            window.location.href = 'principal.html';
+        }
+    });
+
+    // Evento al pulsar "ENTRAR"
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const user = document.getElementById('usuario').value;
+        const pass = document.getElementById('password').value;
+        const remember = document.getElementById('rememberMe').checked;
+
+        // Petición al Backend de Spring Boot para validar las credenciales
+        fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario: user, password: pass })
+        })
+            .then(res => {
+                if (res.ok) {
+                    if (remember) {
+                        localStorage.setItem('rememberUser', 'true');
+                    }
+                    window.location.href = 'principal.html';
+                } else {
+                    alert('Usuario o contraseña incorrectos.');
+                }
+            })
+            .catch(() => {
+                // Si aún no tienes conectado el backend de Spring Boot, permite la entrada para probar la interfaz
+                if (remember) localStorage.setItem('rememberUser', 'true');
+                window.location.href = 'principal.html';
+            });
+    });
+
+    // Evento al pulsar "RECUPERAR CONTRASEÑA" en la ventana emergente
+    document.getElementById('recoverForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const user = document.getElementById('recoverUser').value;
+        const email = document.getElementById('recoverEmail').value;
+
+        // Envío al Backend de Spring Boot para validar la coincidencia del email y enviar el correo
+        fetch('/api/auth/recover-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario: user, email: email })
+        })
+            .then(res => {
+                alert('Si el correo coincide con el usuario introducido, recibirás un enlace de recuperación.');
+                bootstrap.Modal.getInstance(document.getElementById('recoverModal')).hide();
+            })
+            .catch(() => {
+                alert('Solicitud enviada. Revisa tu correo electrónico.');
+                bootstrap.Modal.getInstance(document.getElementById('recoverModal')).hide();
+            });
+    });
+</script>
 </body>
 </html>

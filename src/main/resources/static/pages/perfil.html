@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi perfil</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="cabecera">
+    <div class="titulo">
+        <button class="icono-btn" onclick="history.back()">←</button>
+        <img src="/assets/img/logo.png" class="logo" alt="Logo">
+        <span>Mi perfil</span>
+    </div>
+</header>
+
+<main>
+    <div class="tarjeta">
+        <form id="form-perfil">
+            <label>Nombre</label>
+            <input type="text" id="perfil-nombre" disabled>
+
+            <label>Apellidos</label>
+            <input type="text" id="perfil-apellidos" disabled>
+
+            <label>DNI</label>
+            <input type="text" id="perfil-dni">
+
+            <label>Teléfono</label>
+            <input type="text" id="perfil-telefono">
+
+            <label>Email</label>
+            <input type="email" id="perfil-email">
+
+            <label>Fecha de nacimiento</label>
+            <input type="date" id="perfil-fecha-nacimiento">
+
+            <label>Posición</label>
+            <select id="perfil-posicion">
+                <option value="DRIVE">Drive</option>
+                <option value="REVES">Revés</option>
+                <option value="AMBOS">Ambos</option>
+            </select>
+
+            <p class="error-msg" id="error-perfil"></p>
+            <p style="color:var(--color-exito); display:none;" id="ok-perfil">Datos actualizados. Se ha notificado al capitán.</p>
+
+            <button type="submit" class="btn">Guardar cambios</button>
+        </form>
+    </div>
+
+    <div class="tarjeta">
+        <h3>Cambiar contraseña</h3>
+        <form id="form-password">
+            <label>Contraseña actual</label>
+            <input type="password" id="password-actual" required>
+
+            <label>Nueva contraseña</label>
+            <input type="password" id="password-nueva" required>
+
+            <label>Repite la nueva contraseña</label>
+            <input type="password" id="password-nueva-2" required>
+
+            <p class="error-msg" id="error-password"></p>
+
+            <button type="submit" class="btn">Actualizar contraseña</button>
+        </form>
+    </div>
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/perfil.js"></script>
+</body>
+</html>
