@@ -3,55 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Epopeya App</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Menú Principal - Epopeya App</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Iconos de Bootstrap (Bootstrap Icons) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Fuentes estilo clásico griego -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Personalizado para la pantalla principal -->
+    <link rel="stylesheet" href="principal.css">
 </head>
 <body>
 
-<header class="cabecera">
-    <div class="titulo">
-        <img src="/assets/img/logo.png" class="logo" alt="Logo">
-        <span>Epopeya Pádel</span>
+<!-- CABECERA PRINCIPAL -->
+<header class="greek-header d-flex justify-content-between align-items-center">
+    <!-- Izquierda: Icono Salir (Cierra sesión) -->
+    <button id="logoutBtn" class="header-icon-btn" title="Cerrar Sesión">
+        <i class="bi bi-box-arrow-left fs-4"></i>
+    </button>
+
+    <!-- Centro: Logo del equipo -->
+    <div class="text-center">
+        <img src="../assets/img/logo.jpeg" alt="Logo Equipo" class="header-logo">
     </div>
-    <div>
-        <button class="icono-btn" id="btn-usuario" title="Mi perfil">👤</button>
-        <button class="icono-btn" id="btn-logout" title="Cerrar sesión">⏻</button>
-    </div>
+
+    <!-- Derecha: Icono de Usuario (Perfil) -->
+    <a href="perfil.html" class="header-icon-btn" title="Mi Perfil">
+        <i class="bi bi-person-circle fs-4"></i>
+    </a>
 </header>
 
-<main>
-    <div class="grid-menu" id="grid-menu">
-        <button class="btn oculto" id="btn-jugadores">👥<br>Jugadores</button>
-        <button class="btn">🏆<br>Clasificación</button>
-        <button class="btn" id="btn-jornadas">📅<br>Jornadas</button>
-        <button class="btn" id="btn-elecciones">🗳️<br>Elección de fechas</button>
-        <button class="btn" id="btn-disponibilidad">✅<br>Disponibilidad</button>
-        <button class="btn" id="btn-convocatoria">📋<br>Convocatoria</button>
-        <button class="btn" id="btn-estadisticas">📊<br>Estadísticas</button>
+<!-- CONTENIDO PRINCIPAL: BOTONES CUADRADOS (2 COLUMNAS) -->
+<main class="main-container">
+
+    <!-- Fila 1: Jugadores y Clasificación -->
+    <div class="row g-3 mb-3">
+        <div class="col-6">
+            <a href="jugadores.html" class="square-btn">
+                <i class="bi bi-people-fill"></i>
+                <span>JUGADORES</span>
+            </a>
+        </div>
+        <div class="col-6">
+            <a href="" class="square-btn">
+                <i class="bi bi-trophy-fill"></i>
+                <span>CLASIFICACIÓN</span>
+            </a>
+        </div>
     </div>
+
+    <!-- Fila 2: Jornadas y Votos de fecha -->
+    <div class="row g-3 mb-3">
+        <div class="col-6">
+            <a href="jornadas.html" class="square-btn">
+                <i class="bi bi-calendar-event-fill"></i>
+                <span>JORNADAS</span>
+            </a>
+        </div>
+        <div class="col-6">
+            <a href="elecciones.html" class="square-btn">
+                <i class="bi bi-ui-checks"></i>
+                <span>VOTOS FECHA</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Fila 3: Disponibilidad y Convocatoria -->
+    <div class="row g-3 mb-3">
+        <div class="col-6">
+            <a href="disponibilidad.html" class="square-btn">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>DISPONIBILIDAD</span>
+            </a>
+        </div>
+        <div class="col-6">
+            <a href="convocatoria.html" class="square-btn">
+                <i class="bi bi-clipboard-check-fill"></i>
+                <span>CONVOCATORIA</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Fila 4: Estadísticas (Centrado o ocupando la fila) -->
+    <div class="row g-3">
+        <div class="col-6 mx-auto">
+            <a href="estadisticas.html" class="square-btn">
+                <i class="bi bi-bar-chart-line-fill"></i>
+                <span>ESTADÍSTICAS</span>
+            </a>
+        </div>
+    </div>
+
 </main>
 
-<script src="/js/api.js"></script>
+<!-- Scripts de Bootstrap y Lógica JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    exigirSesion();
-    const usuario = getUsuarioActual();
-
-    if (usuario && usuario.rol === "CAPITAN") {
-        document.getElementById("btn-jugadores").classList.remove("oculto");
-    }
-
-    document.getElementById("btn-usuario").addEventListener("click", () => irA("perfil.html"));
-    document.getElementById("btn-logout").addEventListener("click", () => {
-        clearSesion();
-        window.location.href = "/index.html";
+    // Cierre de sesión al pulsar el icono de Salir (Izquierda)
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        if (confirm('¿Deseas salir de la sesión?')) {
+            // Eliminamos la marca de recordar usuario
+            localStorage.removeItem('rememberUser');
+            // Redirigimos a la pantalla de login (index.html)
+            window.location.href = 'index.html';
+        }
     });
-
-    document.getElementById("btn-jugadores")?.addEventListener("click", () => irA("jugadores.html"));
-    document.getElementById("btn-jornadas").addEventListener("click", () => irA("jornadas.html"));
-    document.getElementById("btn-elecciones").addEventListener("click", () => irA("elecciones.html"));
-    document.getElementById("btn-disponibilidad").addEventListener("click", () => irA("disponibilidad.html"));
-    document.getElementById("btn-convocatoria").addEventListener("click", () => irA("convocatoria.html"));
-    document.getElementById("btn-estadisticas").addEventListener("click", () => irA("estadisticas.html"));
 </script>
 </body>
 </html>

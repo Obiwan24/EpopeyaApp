@@ -1,0 +1,108 @@
+/* Estilos generales y fondo */
+body {
+    font-family: 'Lato', sans-serif;
+    background: #1a1612 url('../assets/img/fondo.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding-bottom: 30px;
+}
+
+/* Oscurecedor de fondo */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(20, 16, 12, 0.55);
+    z-index: 0;
+}
+
+/* CABECERA ESTILO GRIEGO */
+.greek-header {
+    position: relative;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(35, 28, 20, 0.95) 0%, rgba(20, 16, 12, 0.85) 100%);
+    border-bottom: 2px solid #c5a059;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    padding: 0.75rem 1.5rem;
+}
+
+.header-icon-btn {
+    background: transparent;
+    border: 1px solid #c5a059;
+    color: #c5a059;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.header-icon-btn:hover {
+    background: #c5a059;
+    color: #1a1612;
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.6);
+}
+
+.header-logo {
+    max-height: 55px;
+    border-radius: 50%;
+    border: 2px solid #c5a059;
+    background: #fff;
+    padding: 2px;
+}
+
+/* REJILLA DE BOTONES CUADRADOS */
+.main-container {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
+
+.square-btn {
+    aspect-ratio: 1 / 1; /* Mantiene la forma cuadrada perfecta */
+    background: rgba(253, 250, 243, 0.92);
+    border: 2px solid #c5a059;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #3a2e21;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 10px rgba(197, 160, 89, 0.15);
+    transition: all 0.3s ease;
+    padding: 15px;
+}
+
+.square-btn:hover {
+    transform: translateY(-5px);
+    background: #ffffff;
+    border-color: #e5be75;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(197, 160, 89, 0.4);
+    color: #8c6d2d;
+}
+
+.square-btn i {
+    font-size: 2.2rem;
+    color: #8c6d2d;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.square-btn:hover i {
+    transform: scale(1.15);
+}
+
+.square-btn span {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-align: center;
+    letter-spacing: 0.5px;
+}

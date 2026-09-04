@@ -3,74 +3,335 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi perfil</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Mi Perfil - EpopeyaApp</title>
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Fuentes estilo clásico -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="perfil.css">
 </head>
 <body>
 
-<header class="cabecera">
-    <div class="titulo">
-        <button class="icono-btn" onclick="history.back()">←</button>
-        <img src="/assets/img/logo.png" class="logo" alt="Logo">
-        <span>Mi perfil</span>
+<!-- CABECERA: Botón Atrás + Logo + Icono Usuario -->
+<header class="greek-header d-flex justify-content-between align-items-center">
+    <!-- Izquierda: Flecha de regreso a Pantalla Principal -->
+    <a href="principal.html" class="header-icon-btn" title="Volver al Menú Principal">
+        <i class="bi bi-arrow-left fs-4"></i>
+    </a>
+
+    <!-- Centro: Logo del equipo -->
+    <div class="text-center">
+        <img src="../assets/img/logo.jpeg" alt="Logo Equipo" class="header-logo">
     </div>
+
+    <!-- Derecha: Perfil (Activo) -->
+    <a href="perfil.html" class="header-icon-btn" title="Mi Perfil">
+        <i class="bi bi-person-circle fs-4"></i>
+    </a>
 </header>
 
-<main>
-    <div class="tarjeta">
-        <form id="form-perfil">
-            <label>Nombre</label>
-            <input type="text" id="perfil-nombre" disabled>
+<main class="profile-container">
 
-            <label>Apellidos</label>
-            <input type="text" id="perfil-apellidos" disabled>
-
-            <label>DNI</label>
-            <input type="text" id="perfil-dni">
-
-            <label>Teléfono</label>
-            <input type="text" id="perfil-telefono">
-
-            <label>Email</label>
-            <input type="email" id="perfil-email">
-
-            <label>Fecha de nacimiento</label>
-            <input type="date" id="perfil-fecha-nacimiento">
-
-            <label>Posición</label>
-            <select id="perfil-posicion">
-                <option value="DRIVE">Drive</option>
-                <option value="REVES">Revés</option>
-                <option value="AMBOS">Ambos</option>
-            </select>
-
-            <p class="error-msg" id="error-perfil"></p>
-            <p style="color:var(--color-exito); display:none;" id="ok-perfil">Datos actualizados. Se ha notificado al capitán.</p>
-
-            <button type="submit" class="btn">Guardar cambios</button>
-        </form>
+    <!-- SECCIÓN CAPITÁN (Solo visible para rol CAPITAN) -->
+    <div id="captainSection" class="captain-badge d-none">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <i class="bi bi-shield-lock-fill me-2 fs-5"></i>
+                <span>ERES EL CAPITÁN DEL EQUIPO</span>
+            </div>
+            <button class="btn btn-sm btn-light text-dark fw-bold" data-bs-toggle="modal" data-bs-target="#modalCederCapitania">
+                Ceder Capitanía
+            </button>
+        </div>
     </div>
 
-    <div class="tarjeta">
-        <h3>Cambiar contraseña</h3>
-        <form id="form-password">
-            <label>Contraseña actual</label>
-            <input type="password" id="password-actual" required>
+    <!-- TARJETA PRINCIPAL DE DATOS DE PERFIL -->
+    <div class="greek-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="font-cinzel text-dark m-0" style="font-family:'Cinzel';">Mi Perfil</h3>
+            <!-- Botón pequeño para editar datos personales -->
+            <button class="btn btn-greek-outline btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarDatos">
+                <i class="bi bi-pencil-square me-1"></i> Editar Datos
+            </button>
+        </div>
 
-            <label>Nueva contraseña</label>
-            <input type="password" id="password-nueva" required>
+        <!-- Mostrar Todos los Datos Introducidos -->
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="profile-label">Username</div>
+                <div class="profile-value" id="valUsername">usuario_ejemplo</div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-label">Posición</div>
+                <div class="profile-value" id="valPosicion">REVES</div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-label">Nombre</div>
+                <div class="profile-value" id="valNombre">Alejandro</div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-label">Apellidos</div>
+                <div class="profile-value" id="valApellidos">García Pérez</div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-label">DNI</div>
+                <div class="profile-value" id="valDni">12345678X</div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-label">Email</div>
+                <div class="profile-value" id="valEmail">jugador@correo.com</div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-label">Teléfono</div>
+                <div class="profile-value" id="valTelefono">600123456</div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-label">Fecha de Nacimiento</div>
+                <div class="profile-value" id="valFechaNac">1995-05-12</div>
+            </div>
+        </div>
 
-            <label>Repite la nueva contraseña</label>
-            <input type="password" id="password-nueva-2" required>
-
-            <p class="error-msg" id="error-password"></p>
-
-            <button type="submit" class="btn">Actualizar contraseña</button>
-        </form>
+        <!-- Botón Cambiar Contraseña -->
+        <div class="mt-4 pt-3 text-center border-top">
+            <button class="btn btn-greek w-100" data-bs-toggle="modal" data-bs-target="#modalCambiarPassword">
+                <i class="bi bi-key-fill me-2"></i> Cambiar Contraseña
+            </button>
+        </div>
     </div>
 </main>
 
-<script src="/js/api.js"></script>
-<script src="/js/perfil.js"></script>
+<!-- MODAL 1: EDITAR DATOS PERSONALES -->
+<div class="modal fade" id="modalEditarDatos" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Datos Personales</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarDatos">
+                    <!-- Username: Editable solo si es CAPITÁN -->
+                    <div class="mb-3">
+                        <label class="form-label font-cinzel">Username</label>
+                        <input type="text" class="form-control" id="editUsername" disabled>
+                        <small class="text-muted d-block mt-1" id="usernameHelp">Solo modificable por el CAPITÁN.</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-cinzel">Nombre</label>
+                            <input type="text" class="form-control" id="editNombre" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-cinzel">Apellidos</label>
+                            <input type="text" class="form-control" id="editApellidos" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-cinzel">DNI</label>
+                            <input type="text" class="form-control" id="editDni" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-cinzel">Teléfono</label>
+                            <input type="tel" class="form-control" id="editTelefono" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label font-cinzel">Email</label>
+                        <input type="email" class="form-control" id="editEmail" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-cinzel">Fecha de Nacimiento</label>
+                            <input type="date" class="form-control" id="editFechaNac" required>
+                        </div>
+                        <!-- Desplegable Enum Posicion -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label font-cinzel">Posición</label>
+                            <select class="form-select" id="editPosicion" required>
+                                <option value="DRIVE">DRIVE</option>
+                                <option value="REVES">REVES</option>
+                                <option value="AMBOS">AMBOS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-greek">Confirmar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 2: CAMBIAR CONTRASEÑA -->
+<div class="modal fade" id="modalCambiarPassword" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cambiar Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCambiarPassword">
+                    <div class="mb-3">
+                        <label class="form-label font-cinzel">Contraseña Actual</label>
+                        <input type="password" class="form-control" id="passActual" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label font-cinzel">Nueva Contraseña</label>
+                        <input type="password" class="form-control" id="passNueva" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label font-cinzel">Confirmar Nueva Contraseña</label>
+                        <input type="password" class="form-control" id="passConfirm" required>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-greek">Confirmar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 3: CEDER CAPITANÍA (Solo Capitán) -->
+<div class="modal fade" id="modalCederCapitania" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ceder Capitanía</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted small">Selecciona al nuevo capitán del equipo. Perderás los derechos de capitán y pasarás a ser jugador.</p>
+                <form id="formCederCapitania">
+                    <div class="mb-3">
+                        <label class="form-label font-cinzel">Nuevo Capitán</label>
+                        <select class="form-select" id="selectNuevoCapitan" required>
+                            <option value="">Cargando lista de jugadores...</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-greek">Confirmar Nuevo Capitán</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Bootstrap + Lógica -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Rol del usuario (Simulación: pon true para probar el panel de Capitán)
+    let esCapitan = true;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Mostrar apartado de capitán si corresponde
+        if (esCapitan) {
+            document.getElementById('captainSection').classList.remove('d-none');
+            document.getElementById('editUsername').removeAttribute('disabled');
+            document.getElementById('usernameHelp').textContent = "Como CAPITÁN puedes editar tu Username.";
+            cargarListaJugadores();
+        }
+
+        // 2. Cargar datos del perfil en el formulario modal
+        document.getElementById('modalEditarDatos').addEventListener('show.bs.modal', () => {
+            document.getElementById('editUsername').value = document.getElementById('valUsername').textContent;
+            document.getElementById('editNombre').value = document.getElementById('valNombre').textContent;
+            document.getElementById('editApellidos').value = document.getElementById('valApellidos').textContent;
+            document.getElementById('editDni').value = document.getElementById('valDni').textContent;
+            document.getElementById('editEmail').value = document.getElementById('valEmail').textContent;
+            document.getElementById('editTelefono').value = document.getElementById('valTelefono').textContent;
+            document.getElementById('editFechaNac').value = document.getElementById('valFechaNac').textContent;
+            document.getElementById('editPosicion').value = document.getElementById('valPosicion').textContent;
+        });
+    });
+
+    // Guardar Datos Personales
+    document.getElementById('formEditarDatos').addEventListener('submit', (e) => {
+        e.preventDefault();
+        document.getElementById('valUsername').textContent = document.getElementById('editUsername').value;
+        document.getElementById('valNombre').textContent = document.getElementById('editNombre').value;
+        document.getElementById('valApellidos').textContent = document.getElementById('editApellidos').value;
+        document.getElementById('valDni').textContent = document.getElementById('editDni').value;
+        document.getElementById('valEmail').textContent = document.getElementById('editEmail').value;
+        document.getElementById('valTelefono').textContent = document.getElementById('editTelefono').value;
+        document.getElementById('valFechaNac').textContent = document.getElementById('editFechaNac').value;
+        document.getElementById('valPosicion').textContent = document.getElementById('editPosicion').value;
+
+        bootstrap.Modal.getInstance(document.getElementById('modalEditarDatos')).hide();
+        alert('Datos personales actualizados correctamente.');
+    });
+
+    // Validaciones y cambio de contraseña
+    document.getElementById('formCambiarPassword').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const actual = document.getElementById('passActual').value;
+        const nueva = document.getElementById('passNueva').value;
+        const confirm = document.getElementById('passConfirm').value;
+
+        if (nueva === actual) {
+            alert('La nueva contraseña no puede ser igual a la antigua.');
+            return;
+        }
+
+        if (nueva !== confirm) {
+            alert('La confirmación no coincide con la nueva contraseña.');
+            return;
+        }
+
+        // Envío al backend (se enviará el correo informativo tras el cambio)
+        fetch('/api/perfil/cambiar-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ actual, nueva })
+        }).finally(() => {
+            alert('Contraseña modificada con éxito. Se ha enviado un correo electrónico de confirmación.');
+            bootstrap.Modal.getInstance(document.getElementById('modalCambiarPassword')).hide();
+            document.getElementById('formCambiarPassword').reset();
+        });
+    });
+
+    // Cargar lista de jugadores para ceder capitanía
+    function cargarListaJugadores() {
+        // Simulación o petición a Spring Boot (/api/jugadores)
+        const jugadores = [
+            { id: 2, nombre: 'Carlos Ruiz' },
+            { id: 3, nombre: 'David Gómez' }
+        ];
+        const select = document.getElementById('selectNuevoCapitan');
+        select.innerHTML = '<option value="">Selecciona un jugador...</option>';
+        jugadores.forEach(j => {
+            select.innerHTML += `<option value="${j.id}">${j.nombre}</option>`;
+        });
+    }
+
+    // Ceder Capitanía
+    document.getElementById('formCederCapitania').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nuevoId = document.getElementById('selectNuevoCapitan').value;
+        if (!nuevoId) return;
+
+        if (confirm('¿Estás seguro de ceder la capitanía? Perderás tus privilegios de capitán.')) {
+            esCapitan = false;
+            document.getElementById('captainSection').classList.add('d-none');
+            document.getElementById('editUsername').setAttribute('disabled', 'true');
+            bootstrap.Modal.getInstance(document.getElementById('modalCederCapitania')).hide();
+            alert('Capitanía cedida con éxito. Ahora eres jugador.');
+        }
+    });
+</script>
 </body>
 </html>

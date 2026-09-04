@@ -3,28 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disponibilidad</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Disponibilidad - EpopeyaApp</title>
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Fuentes estilo clásico -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="disponibilidad.css">
 </head>
 <body>
 
-<header class="cabecera">
-    <div class="titulo">
-        <button class="icono-btn" onclick="history.back()">←</button>
-        <img src="/assets/img/logo.png" class="logo" alt="Logo">
-        <span>Disponibilidad</span>
+<!-- CABECERA -->
+<header class="greek-header d-flex justify-content-between align-items-center">
+    <a href="principal.html" class="header-icon-btn" title="Volver al Menú Principal">
+        <i class="bi bi-arrow-left fs-4"></i>
+    </a>
+    <div class="text-center">
+        <img src="../assets/img/logo.jpeg" alt="Logo Equipo" class="header-logo">
     </div>
-    <button class="icono-btn" onclick="location.href='/pages/perfil.html'">👤</button>
+    <a href="perfil.html" class="header-icon-btn" title="Mi Perfil">
+        <i class="bi bi-person-circle fs-4"></i>
+    </a>
 </header>
 
-<main>
-    <button class="btn oculto" id="btn-nueva-jornada" style="margin-bottom:14px;">+ Añadir jornada</button>
-    <div id="lista-disponibilidad"></div>
+<main class="disponibilidad-container">
+
+    <!-- ENCABEZADO Y BOTÓN AÑADIR JORNADA (Solo Capitán) -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-white font-cinzel m-0" style="font-family:'Cinzel';">Disponibilidad</h3>
+        <button id="btnNuevaJornada" class="btn btn-greek" onclick="abrirModalJornada()">
+            <i class="bi bi-plus-circle me-1"></i> Añadir Jornada
+        </button>
+    </div>
+
+    <!-- LISTA DE CUADROS DE JORNADAS -->
+    <div id="listaDisponibilidades">
+
+        <!-- JORNADA 1 -->
+        <div class="jornada-card" onclick="clickJornadaCard(event, 1, 'Jornada 1', 'NUDION', '2026-10-12')">
+            <div class="jornada-title d-flex justify-content-between align-items-center">
+                <div>
+                    <span>JORNADA 1 — EPOPEYA vs NUDION</span>
+                    <div class="fs-6 text-muted font-monospace"><i class="bi bi-calendar-event me-1"></i>Fecha: 12/10/2026</div>
+                </div>
+
+                <!-- Botones de gestión para el Capitán -->
+                <div class="captain-only d-flex gap-1" onclick="event.stopPropagation();">
+                    <button class="btn btn-sm btn-outline-secondary" title="Modificar Jornada" onclick="abrirModalJornada(1, 'NUDION', '2026-10-12')">
+                        <i class="bi bi-pencil-fill"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" title="Borrar Jornada" onclick="borrarJornada(1)">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Horarios de los partidos -->
+            <div class="row mt-2 g-2">
+                <div class="col-md-4">
+                    <div class="match-info">
+                        <strong>Partido 1:</strong> 18:00h
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="match-info">
+                        <strong>Partido 2:</strong> 19:30h
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="match-info">
+                        <strong>Partido 3:</strong> 21:00h
+                    </div>
+                </div>
+            </div>
+
+            <!-- Check de Disponibilidad para el Jugador Logueado -->
+            <div class="user-availability-box d-flex justify-content-between align-items-center" onclick="event.stopPropagation();">
+                <span class="fw-bold"><i class="bi bi-question-circle me-1"></i> ¿Estarás disponible para esta jornada?</span>
+                <div class="form-check form-switch fs-5 m-0">
+                    <input class="form-check-input" type="checkbox" role="switch" onchange="toggleDisponibilidadUsuario(this, 1)">
+                </div>
+            </div>
+        </div>
+
+    </div>
 </main>
 
-<div id="detalle-disponibilidad" class="oculto"></div>
+<!-- MODAL 1: AÑADIR / MODIFICAR JORNADA (Capitán) -->
+<div class="modal fade" id="modalFormJornada" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalJornadaTitulo">Añadir Jornada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formJornada">
+                    <input type="hidden" id="jornadaId">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label font-cinzel">Nº de Jornada</label>
+                            <input type="text" class="form-control" id="inputNumJornada" placeholder="Ej: Jornada 1" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label font-cinzel">Equipo Rival</label>
+                            <input type="text" class="form-control" id="inputEquipoRival" placeholder="Ej: NUDION" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label font-cinzel">Fecha del Encuentro</label>
+                            <input type="date" class="form-control" id="inputFechaJornada" required>
+                        </div>
+                    </div>
 
-<script src="/js/api.js"></script>
-<script src="/js/disponibilidad.js"></script>
+                    <!-- fechas de los partidos -->
+                    <h6 class="font-cinzel fw-bold mt-3">Horarios de Partidos</h6>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label small">Partido 1</label>
+                            <input type="datetime-local" class="form-control" id="fechaHoraP1" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small">Partido 2</label>
+                            <input type="datetime-local" class="form-control" id="fechaHoraP2" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small">Partido 3</label>
+                            <input type="datetime-local" class="form-control" id="fechaHoraP3" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-greek">Guardar Jornada</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL 2: GESTIÓN DE DISPONIBILIDAD DEL EQUIPO (Visible al pulsar el cuadro siendo Capitán) -->
+<div class="modal fade" id="modalListaDisponibilidad" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalListaTitulo">Disponibilidad del Equipo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted small mb-2">Listado de todos los jugadores. Puedes modificar su disponibilidad manualmente:</p>
+                <div id="contenedorListaJugadores" class="border rounded bg-white">
+                    <!-- Carga dinámica de jugadores -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Bootstrap + Lógica -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let esCapitan = true; // Cambia a false para simular vista de jugador estándar
+
+    // Datos simulados de plantilla
+    let jugadoresPlantilla = [
+        { id: 1, nombre: "Alejandro García", disponible: true },
+        { id: 2, nombre: "Carlos Ruiz", disponible: false },
+        { id: 3, nombre: "David Gómez", disponible: true },
+        { id: 4, nombre: "Juan López", disponible: false }
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!esCapitan) {
+            document.querySelectorAll('.captain-only').forEach(el => el.classList.add('d-none'));
+            document.getElementById('btnNuevaJornada').classList.add('d-none');
+        }
+    });
+
+    // Evento al hacer click sobre el cuadro de la jornada
+    function clickJornadaCard(event, jornadaId, tituloJornada, rival, fecha) {
+        if (!esCapitan) return; // Si no es capitán, no abre la lista del equipo
+
+        document.getElementById('modalListaTitulo').textContent = `${tituloJornada} - ${rival} (${fecha})`;
+
+        const contenedor = document.getElementById('contenedorListaJugadores');
+        contenedor.innerHTML = '';
+
+        jugadoresPlantilla.forEach(j => {
+            contenedor.innerHTML += `
+                    <div class="player-row-list">
+                        <span><i class="bi bi-person-fill me-2"></i>${j.nombre}</span>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" ${j.disponible ? 'checked' : ''} onchange="cambiarDisponibilidadCapitan(${j.id}, this.checked)">
+                        </div>
+                    </div>
+                `;
+        });
+
+        new bootstrap.Modal(document.getElementById('modalListaDisponibilidad')).show();
+    }
+
+    // Cambio de disponibilidad por el usuario logueado (+1 estadística)
+    function toggleDisponibilidadUsuario(checkbox, jornadaId) {
+        if (checkbox.checked) {
+            fetch(`/api/estadisticas/sumar-disponibilidad?jornadaId=${jornadaId}`, { method: 'POST' });
+        } else {
+            fetch(`/api/estadisticas/restar-disponibilidad?jornadaId=${jornadaId}`, { method: 'POST' });
+        }
+    }
+
+    // Cambio manual por el capitán en la ventana emergente
+    function cambiarDisponibilidadCapitan(jugadorId, estado) {
+        let jugador = jugadoresPlantilla.find(j => j.id === jugadorId);
+        if (jugador) jugador.disponible = estado;
+        fetch(`/api/disponibilidad/modificar-jugador`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jugadorId, disponible: estado })
+        });
+    }
+
+    // Abrir Modal Crear / Modificar
+    function abrirModalJornada(id = null, rival = '', fecha = '') {
+        const modalEl = document.getElementById('modalFormJornada');
+        const titulo = document.getElementById('modalJornadaTitulo');
+
+        if (id) {
+            titulo.textContent = 'Modificar Jornada';
+            document.getElementById('jornadaId').value = id;
+            document.getElementById('inputNumJornada').value = 'Jornada ' + id;
+            document.getElementById('inputEquipoRival').value = rival;
+            document.getElementById('inputFechaJornada').value = fecha;
+            document.getElementById('horaP1').value = '18:00';
+            document.getElementById('horaP2').value = '19:30';
+            document.getElementById('horaP3').value = '21:00';
+        } else {
+            titulo.textContent = 'Añadir Jornada';
+            document.getElementById('formJornada').reset();
+            document.getElementById('jornadaId').value = '';
+        }
+
+        new bootstrap.Modal(modalEl).show();
+    }
+
+    // Formulario Guardar Jornada
+    document.getElementById('formJornada').addEventListener('submit', (e) => {
+        e.preventDefault();
+        bootstrap.Modal.getInstance(document.getElementById('modalFormJornada')).hide();
+        alert('Jornada guardada correctamente.');
+    });
+
+    // Borrar Jornada
+    function borrarJornada(id) {
+        if (confirm('¿Estás seguro de que deseas eliminar esta jornada de disponibilidad?')) {
+            fetch(`/api/disponibilidad/borrar/${id}`, { method: 'DELETE' })
+                .then(() => alert('Jornada eliminada.'));
+        }
+    }
+</script>
 </body>
 </html>

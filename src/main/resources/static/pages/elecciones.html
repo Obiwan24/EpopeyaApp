@@ -3,25 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elección de fechas</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Votos Fecha - EpopeyaApp</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="elecciones.css">
 </head>
 <body>
 
-<header class="cabecera">
-    <div class="titulo">
-        <button class="icono-btn" onclick="history.back()">←</button>
-        <img src="/assets/img/logo.png" class="logo" alt="Logo">
-        <span>Elección de fechas</span>
+<!-- CABECERA -->
+<header class="greek-header d-flex justify-content-between align-items-center">
+    <a href="principal.html" class="header-icon-btn" title="Volver al Menú Principal">
+        <i class="bi bi-arrow-left fs-4"></i>
+    </a>
+    <div class="text-center">
+        <img src="/assets/img/logo.jpeg" alt="Logo Equipo" class="header-logo">
     </div>
-    <button class="icono-btn" onclick="location.href='/pages/perfil.html'">👤</button>
+    <a href="perfil.html" class="header-icon-btn" title="Mi Perfil">
+        <i class="bi bi-person-circle fs-4"></i>
+    </a>
 </header>
 
-<main>
-    <div id="contenido-elecciones"></div>
+<main class="votos-container">
+
+    <!-- ENCABEZADO Y BOTÓN AÑADIR JORNADA (Solo Capitán) -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-white font-cinzel m-0" style="font-family:'Cinzel';">Votos Fecha</h3>
+        <button id="btnNuevaJornada" class="btn btn-greek" onclick="abrirModalJornada()">
+            <i class="bi bi-plus-circle me-1"></i> Añadir Jornada
+        </button>
+    </div>
+
+    <!-- LISTA DE JORNADAS A VOTAR -->
+    <div id="listaVotosJornadas">
+
+        <!-- EJEMPLO JORNADA 1 -->
+        <div class="jornada-card">
+            <div class="jornada-title d-flex justify-content-between align-items-center">
+                <div>
+                    <span>JORNADA 1 — EPOPEYA vs NUDION</span>
+                </div>
+
+                <!-- Botones Modificar y Borrar (Solo Capitán) -->
+                <div class="captain-only d-flex gap-1">
+                    <button class="btn btn-sm btn-outline-secondary" title="Modificar Jornada" onclick="abrirModalJornada(1, 'NUDION')">
+                        <i class="bi bi-pencil-fill"></i> Modificar
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" title="Borrar Jornada" onclick="borrarJornada(1)">
+                        <i class="bi bi-trash-fill"></i> Borrar
+                    </button>
+                </div>
+            </div>
+
+            <p class="small text-muted mt-2 mb-1">Selecciona las opciones cuyas fechas y horarios de partidos se adapten a tu disponibilidad:</p>
+
+            <!-- OPCIÓN 1 -->
+            <div class="option-box">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong class="text-dark fs-5"><i class="bi bi-calendar-event me-2"></i>Opción 1 — 10/10/2026</strong>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-secondary rounded-pill" id="votosOp1_1">3 votos</span>
+                        <div class="form-check form-switch fs-4 m-0">
+                            <input class="form-check-input" type="checkbox" role="switch" onchange="votarOpcion(1, 1, this.checked)">
+                        </div>
+                    </div>
+                </div>
+                <!-- Horarios de los 3 Partidos para la Opción 1 -->
+                <div class="row g-2">
+                    <div class="col-md-4"><div class="match-badge"><strong>P1:</strong> 17:00h</div></div>
+                    <div class="col-md-4"><div class="match-badge"><strong>P2:</strong> 18:30h</div></div>
+                    <div class="col-md-4"><div class="match-badge"><strong>P3:</strong> 20:00h</div></div>
+                </div>
+            </div>
+
+            <!-- OPCIÓN 2 -->
+            <div class="option-box">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong class="text-dark fs-5"><i class="bi bi-calendar-event me-2"></i>Opción 2 — 11/10/2026</strong>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-secondary rounded-pill" id="votosOp2_1">5 votos</span>
+                        <div class="form-check form-switch fs-4 m-0">
+                            <input class="form-check-input" type="checkbox" role="switch" onchange="votarOpcion(1, 2, this.checked)">
+                        </div>
+                    </div>
+                </div>
+                <!-- Horarios de los 3 Partidos para la Opción 2 -->
+                <div class="row g-2">
+                    <div class="col-md-4"><div class="match-badge"><strong>P1:</strong> 10:00h</div></div>
+                    <div class="col-md-4"><div class="match-badge"><strong>P2:</strong> 11:30h</div></div>
+                    <div class="col-md-4"><div class="match-badge"><strong>P3:</strong> 13:00h</div></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </main>
 
-<script src="/js/api.js"></script>
-<script src="/js/elecciones.js"></script>
+<!-- MODAL: AÑADIR / MODIFICAR JORNADA (Capitán) -->
+<div class="modal fade" id="modalFormVotos" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalVotosTitulo">Añadir Jornada</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formVotosJornada">
+                    <input type="hidden" id="jornadaId">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label font-cinzel">Nº de Jornada</label>
+                            <input type="text" class="form-control" id="inputNumJornada" placeholder="Ej: Jornada 1" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label font-cinzel">Equipo Rival</label>
+                            <input type="text" class="form-control" id="inputEquipoRival" placeholder="Ej: NUDION" required>
+                        </div>
+                    </div>
+
+                    <!-- Configuración Opción 1 con 3 Partidos -->
+                    <div class="p-3 border rounded bg-light mb-3">
+                        <h6 class="font-cinzel fw-bold text-dark"><i class="bi bi-clock me-1"></i> Opción 1</h6>
+                        <div class="mb-2">
+                            <label class="form-label small">Fecha</label>
+                            <input type="date" class="form-control form-control-sm" id="op1Fecha" required>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <label class="form-label small">Hora Partido 1</label>
+                                <input type="time" class="form-control form-control-sm" id="op1HoraP1" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Hora Partido 2</label>
+                                <input type="time" class="form-control form-control-sm" id="op1HoraP2" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Hora Partido 3</label>
+                                <input type="time" class="form-control form-control-sm" id="op1HoraP3" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuración Opción 2 con 3 Partidos -->
+                    <div class="p-3 border rounded bg-light mb-3">
+                        <h6 class="font-cinzel fw-bold text-dark"><i class="bi bi-clock me-1"></i> Opción 2</h6>
+                        <div class="mb-2">
+                            <label class="form-label small">Fecha</label>
+                            <input type="date" class="form-control form-control-sm" id="op2Fecha" required>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <label class="form-label small">Hora Partido 1</label>
+                                <input type="time" class="form-control form-control-sm" id="op2HoraP1" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Hora Partido 2</label>
+                                <input type="time" class="form-control form-control-sm" id="op2HoraP2" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Hora Partido 3</label>
+                                <input type="time" class="form-control form-control-sm" id="op2HoraP3" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-greek">Guardar Jornada</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let esCapitan = true;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!esCapitan) {
+            document.querySelectorAll('.captain-only').forEach(el => el.classList.add('d-none'));
+            document.getElementById('btnNuevaJornada').classList.add('d-none');
+        }
+    });
+
+    function votarOpcion(jornadaId, opcionNum, estado) {
+        fetch(`/api/votos/registrar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jornadaId, opcionNum, estado })
+        });
+    }
+
+    function abrirModalJornada(id = null, rival = '') {
+        const modalEl = document.getElementById('modalFormVotos');
+        const titulo = document.getElementById('modalVotosTitulo');
+
+        if (id) {
+            titulo.textContent = 'Modificar Jornada de Votos';
+            document.getElementById('jornadaId').value = id;
+            document.getElementById('inputNumJornada').value = 'Jornada ' + id;
+            document.getElementById('inputEquipoRival').value = rival;
+
+            // Opción 1
+            document.getElementById('op1Fecha').value = '2026-10-10';
+            document.getElementById('op1HoraP1').value = '17:00';
+            document.getElementById('op1HoraP2').value = '18:30';
+            document.getElementById('op1HoraP3').value = '20:00';
+
+            // Opción 2
+            document.getElementById('op2Fecha').value = '2026-10-11';
+            document.getElementById('op2HoraP1').value = '10:00';
+            document.getElementById('op2HoraP2').value = '11:30';
+            document.getElementById('op2HoraP3').value = '13:00';
+        } else {
+            titulo.textContent = 'Añadir Jornada de Votos';
+            document.getElementById('formVotosJornada').reset();
+            document.getElementById('jornadaId').value = '';
+        }
+
+        new bootstrap.Modal(modalEl).show();
+    }
+
+    document.getElementById('formVotosJornada').addEventListener('submit', (e) => {
+        e.preventDefault();
+        bootstrap.Modal.getInstance(document.getElementById('modalFormVotos')).hide();
+        alert('Jornada de votación guardada con los 3 partidos por opción.');
+    });
+
+    function borrarJornada(id) {
+        if (confirm('¿Deseas eliminar esta propuesta de votación?')) {
+            fetch(`/api/votos/borrar/${id}`, { method: 'DELETE' })
+                .then(() => alert('Jornada eliminada.'));
+        }
+    }
+</script>
 </body>
 </html>

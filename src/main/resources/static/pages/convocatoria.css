@@ -1,0 +1,130 @@
+/* Fondo y contenedor general */
+body {
+    font-family: 'Lato', sans-serif;
+    background: #1a1612 url('../assets/img/fondo.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding-bottom: 40px;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(20, 16, 12, 0.6);
+    z-index: 0;
+}
+
+/* Cabecera */
+.greek-header {
+    position: relative;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(35, 28, 20, 0.95) 0%, rgba(20, 16, 12, 0.85) 100%);
+    border-bottom: 2px solid #c5a059;
+    padding: 0.75rem 1.5rem;
+}
+
+.header-icon-btn {
+    background: transparent;
+    border: 1px solid #c5a059;
+    color: #c5a059;
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.header-icon-btn:hover { background: #c5a059; color: #1a1612; }
+.header-logo { max-height: 55px; border-radius: 50%; border: 2px solid #c5a059; background: #fff; padding: 2px; }
+
+/* Contenedor de convocatorias */
+.convocatoria-container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* ESTADOS DE LA TARJETA DE JORNADA */
+.jornada-card {
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+}
+
+/* Estado 1: Pendiente / Activa (Estilo pergamino/mármol) */
+.jornada-card.estado-activa {
+    background: rgba(253, 250, 243, 0.95);
+    border: 2px solid #c5a059;
+    color: #2b2118;
+}
+
+/* Estado 2: Aplazada (Estilo amarillo/dorado cálido) */
+.jornada-card.estado-aplazada {
+    background: rgba(255, 243, 205, 0.95);
+    border: 2px solid #ffc107;
+    color: #664d03;
+}
+
+/* Estado 3: Finalizada (Estilo Oscuro) */
+.jornada-card.estado-finalizada {
+    background: rgba(40, 36, 32, 0.92);
+    border: 2px solid #6c757d;
+    color: #e0e0e0;
+}
+
+/* Encabezado de la Jornada */
+.jornada-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.4);
+    padding-bottom: 8px;
+}
+
+/* Tarjeta interna de cada Partido */
+.match-box {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid #d5c39e;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 10px;
+}
+
+.jornada-card.estado-finalizada .match-box {
+    background: rgba(25, 22, 19, 0.6);
+    border-color: #4a443c;
+}
+
+/* Jugador y Checkbox */
+.player-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+}
+
+.btn-greek {
+    background: linear-gradient(135deg, #c5a059 0%, #9e7a37 100%);
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+}
+
+.btn-greek:hover {
+    background: linear-gradient(135deg, #d4af66 0%, #ad8741 100%);
+    color: #fff;
+}
+
+/* Modales */
+.modal-content { background: #fdfaf3; border: 2px solid #c5a059; }
+.modal-header { background: #f4ebd9; border-bottom: 1px solid #c5a059; }
+.modal-title { font-family: 'Cinzel', serif; font-weight: 700; color: #3a2e21; }
