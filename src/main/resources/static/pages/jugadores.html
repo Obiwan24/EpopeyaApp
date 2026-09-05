@@ -3,68 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jugadores</title>
-    <link rel="stylesheet" href="/pages/style.css">
+    <title>Plantilla de Jugadores - Epopeya App</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="jugadores.css">
 </head>
 <body>
 
-<header class="cabecera">
-    <div class="titulo">
-        <button class="icono-btn" onclick="history.back()">←</button>
-        <img src="/assets/img/logo.png" class="logo" alt="Logo">
-        <span>Jugadores</span>
+<!-- CABECERA -->
+<header class="greek-header d-flex justify-content-between align-items-center">
+    <a href="principal.html" class="header-icon-btn" title="Volver al Menú Principal">
+        <i class="bi bi-arrow-left fs-4"></i>
+    </a>
+    <div class="text-center">
+        <img src="../assets/img/logo.jpeg" alt="Logo Equipo" class="header-logo">
     </div>
-    <button class="icono-btn" onclick="location.href='/pages/perfil.html'">👤</button>
+    <a href="perfil.html" class="header-icon-btn" title="Mi Perfil">
+        <i class="bi bi-person-circle fs-4"></i>
+    </a>
 </header>
 
-<main>
-    <button class="btn" id="btn-nuevo" style="margin-bottom:14px;">+ Añadir jugador</button>
-    <div id="lista-jugadores"></div>
+<main class="jugadores-container">
+
+    <!-- ENCABEZADO Y BOTÓN AÑADIR JUGADOR (Solo Capitán) -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-white font-cinzel m-0" style="font-family:'Cinzel';">Plantilla del Equipo</h3>
+        <button id="btnNuevoJugador" class="btn btn-greek" data-bs-toogle="modal" data-bs-target="modalNuevoJugador">
+            <i class="bi bi-person-plus-fill me-1"></i> Añadir Jugador
+        </button>
+    </div>
+
+    <!-- LISTADO DE JUGADORES (Ordenados por edad de mayor a menor) -->
+    <div id="listaJugadores">
+        <!-- Los elementos se cargan dinámicamente -->
+    </div>
+
 </main>
 
-<!-- Modal alta / edición -->
-<div id="modal-jugador" class="oculto" style="position:fixed; inset:0; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; overflow:auto; padding:20px;">
-    <div class="tarjeta" style="max-width:420px; width:100%;">
-        <h3 id="titulo-modal">Nuevo jugador</h3>
-        <form id="form-jugador">
-            <input type="hidden" id="jugador-id">
-
-            <label>Nombre</label>
-            <input type="text" id="jugador-nombre" required>
-
-            <label>Apellidos</label>
-            <input type="text" id="jugador-apellidos" required>
-
-            <label>DNI</label>
-            <input type="text" id="jugador-dni" required>
-
-            <label>Teléfono</label>
-            <input type="text" id="jugador-telefono">
-
-            <label>Email</label>
-            <input type="email" id="jugador-email">
-
-            <label>Fecha de nacimiento</label>
-            <input type="date" id="jugador-fecha-nacimiento" required>
-
-            <label>Posición</label>
-            <select id="jugador-posicion">
-                <option value="DRIVE">Drive</option>
-                <option value="REVES">Revés</option>
-                <option value="AMBOS">Ambos</option>
-            </select>
-
-            <p class="error-msg" id="error-jugador"></p>
-
-            <div class="acciones-fila">
-                <button type="submit" class="btn">Guardar</button>
-                <button type="button" class="btn secundario" id="cancelar-modal">Cancelar</button>
+<!-- MODAL 1: AÑADIR JUGADOR (Crea nuevo usuario) -->
+<div class="modal fade" id="modalCrearJugador" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Añadir Nuevo Jugador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-        </form>
+            <div class="modal-body">
+                <form id="formCrearJugador">
+                    <div class="mb-2">
+                        <label class="form-label small font-cinzel">Nombre de Usuario (Login)</label>
+                        <input type="text" class="form-control form-control-sm" id="nuevoUsername" required placeholder="Ej: mgarcia">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small font-cinzel">Nombre Completo</label>
+                        <input type="text" class="form-control form-control-sm" id="nuevoNombre" required placeholder="Ej: Manuel García">
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label small font-cinzel">DNI</label>
+                            <input type="text" class="form-control form-control-sm" id="nuevoDni" required placeholder="12342222-F" oninput="actualizarPassPreview()">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small font-cinzel">Edad</label>
+                            <input type="number" class="form-control form-control-sm" id="nuevaEdad" required min="16" max="90">
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small font-cinzel">Posición</label>
+                        <select class="form-select form-select-sm" id="nuevaPosicion" required>
+                            <option value="Drive">Drive</option>
+                            <option value="Revés">Revés</option>
+                            <option value="Ambas">Ambas</option>
+                        </select>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label small font-cinzel">Teléfono</label>
+                            <input type="tel" class="form-control form-control-sm" id="nuevoTelefono" placeholder="600112233">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small font-cinzel">Email</label>
+                            <input type="email" class="form-control form-control-sm" id="nuevoEmail" placeholder="ejemplo@email.com">
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning py-2 mt-3 mb-0 small">
+                        <i class="bi bi-info-circle me-1"></i> La contraseña generada por defecto será el DNI: <strong id="passPreview">12342222-F</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-greek btn-sm">Crear Usuario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- MODAL 2: VER / MODIFICAR DATOS DEL JUGADOR -->
+<div class="modal fade" id="modalDetalleJugador" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalleTitulo">Datos del Jugador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formModificarJugador" onsubmit="guardarCambiosJugador(event)">
+                    <input type="hidden" id="editJugadorId">
+
+                    <div class="mb-2">
+                        <label class="form-label small font-cinzel">Nombre Completo</label>
+                        <input type="text" class="form-control form-control-sm edit-field" id="editNombre" readonly required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small font-cinzel">Usuario</label>
+                        <input type="text" class="form-control form-control-sm" id="editUsername" readonly disabled>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <label class="form-label small font-cinzel">DNI</label>
+                            <input type="text" class="form-control form-control-sm edit-field" id="editDni" readonly required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small font-cinzel">Edad</label>
+                            <input type="number" class="form-control form-control-sm edit-field" id="editEdad" readonly required>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small font-cinzel">Posición</label>
+                        <select class="form-select form-select-sm edit-field" id="editPosicion" disabled required>
+                            <option value="Drive">Drive</option>
+                            <option value="Revés">Revés</option>
+                            <option value="Ambas">Ambas</option>
+                        </select>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small font-cinzel">Teléfono</label>
+                            <input type="tel" class="form-control form-control-sm edit-field" id="editTelefono" readonly>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small font-cinzel">Email</label>
+                            <input type="email" class="form-control form-control-sm edit-field" id="editEmail" readonly>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <button type="button" id="btnHabilitarEdicion" class="btn btn-outline-secondary btn-sm captain-only" onclick="habilitarModificacion()">
+                            <i class="bi bi-pencil me-1"></i> Modificar Datos
+                        </button>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" id="btnGuardarEdicion" class="btn btn-greek btn-sm d-none">Guardar Cambios</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/api.js"></script>
 <script src="/js/jugadores.js"></script>
+
 </body>
 </html>

@@ -3,25 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jornadas</title>
-    <link rel="stylesheet" href="/pages/style.css">
+    <title>Jornadas - EpopeyApp</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="jornadas.css">
 </head>
 <body>
 
-<header class="cabecera">
-    <div class="titulo">
-        <button class="icono-btn" onclick="history.back()">←</button>
-        <img src="/assets/img/logo.png" class="logo" alt="Logo">
-        <span>Jornadas</span>
+<!-- CABECERA -->
+<header class="greek-header d-flex justify-content-between align-items-center">
+    <a href="principal.html" class="header-icon-btn" title="Volver al Menú Principal">
+        <i class="bi bi-arrow-left fs-4"></i>
+    </a>
+    <div class="text-center">
+        <img src="../assets/img/logo.jpeg" alt="Logo Equipo" class="header-logo">
     </div>
-    <button class="icono-btn" onclick="location.href='/pages/perfil.html'">👤</button>
+    <a href="perfil.html" class="header-icon-btn" title="Mi Perfil">
+        <i class="bi bi-person-circle fs-4"></i>
+    </a>
 </header>
 
-<main>
-    <div id="lista-jornadas"></div>
+<main class="jornadas-container">
+
+    <h3 class="text-white font-cinzel mb-4" style="font-family:'Cinzel';">Jornadas y Partidos</h3>
+
+    <!-- LISTA DE JORNADAS DESPLEGABLES -->
+    <div id="listaJornadas">
+
+        <!-- JORNADA 1 (Muestra dinámica de color según estado) -->
+        <div class="jornada-item estado-pendiente" id="jornadaBox_1">
+
+            <!-- Encabezado de la Jornada (Botón Desplegable) -->
+            <button class="jornada-header-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseJornada1">
+                <span><i class="bi bi-trophy-fill me-2"></i> Jornada 1: Epopeya vs Nudion</span>
+                <i class="bi bi-chevron-down"></i>
+            </button>
+
+            <!-- Contenido Desplegable de los Partidos -->
+            <div id="collapseJornada1" class="collapse">
+                <div class="jornada-body">
+
+                    <!-- PARTIDO 1 -->
+                    <div class="match-card">
+                        <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-1">
+                            <span class="fw-bold"><i class="bi bi-clock me-1"></i> Partido 1 — 12/10/2026 - 18:00h</span>
+
+                            <!-- Seleccionable de Estado del Partido -->
+                            <select class="form-select form-select-sm w-auto" onchange="actualizarEstadoPartido(1, 1, this.value)">
+                                <option value="PENDIENTE">PENDIENTE</option>
+                                <option value="EN_JUEGO">EN_JUEGO</option>
+                                <option value="FINALIZADO">FINALIZADO</option>
+                                <option value="APLAZADO">APLAZADO</option>
+                                <option value="NO_PRESENTADO">NO_PRESENTADO</option>
+                            </select>
+                        </div>
+
+                        <!-- Formulario de Alineaciones y Sets -->
+                        <form id="formPartido_1_1" onsubmit="guardarResultado(event, 1, 1)">
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-sm align-middle mb-2">
+                                    <thead>
+                                    <tr class="small text-muted">
+                                        <th>Pareja</th>
+                                        <th class="text-center">Set 1</th>
+                                        <th class="text-center">Set 2</th>
+                                        <th class="text-center">Set 3</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- Fila Nuestro Equipo (Autocompletado desde Convocatoria) -->
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-dark me-1">EPOPEYA</span>
+                                            <span class="fw-semibold">Alejandro García / Carlos Ruiz</span>
+                                        </td>
+                                        <td class="text-center"><input type="number" class="form-control form-control-sm score-input d-inline" min="0" max="7" id="p1_local_s1"></td>
+                                        <td class="text-center"><input type="number" class="form-control form-control-sm score-input d-inline" min="0" max="7" id="p1_local_s2"></td>
+                                        <td class="text-center"><input type="number" class="form-control form-control-sm score-input d-inline" min="0" max="7" id="p1_local_s3"></td>
+                                    </tr>
+                                    <!-- Fila Equipo Rival (Editable por cualquier usuario) -->
+                                    <tr>
+                                        <td>
+                                            <span class="badge bg-secondary me-1">RIVAL</span>
+                                            <input type="text" class="form-control form-control-sm d-inline-block w-75" placeholder="Nombre Pareja Rival..." id="p1_rival_nombre">
+                                        </td>
+                                        <td class="text-center"><input type="number" class="form-control form-control-sm score-input d-inline" min="0" max="7" id="p1_visit_s1"></td>
+                                        <td class="text-center"><input type="number" class="form-control form-control-sm score-input d-inline" min="0" max="7" id="p1_visit_s2"></td>
+                                        <td class="text-center"><input type="number" class="form-control form-control-sm score-input d-inline" min="0" max="7" id="p1_visit_s3"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Desplegable Resultado Ganado/Perdido (Aparece tras finalizar) -->
+                            <div class="d-none mt-2 pt-2 border-top d-flex align-items-center justify-content-between" id="resultadoBox_1_1">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label class="form-label small fw-bold m-0">Resultado del partido:</label>
+                                    <select class="form-select form-select-sm w-auto" id="selectResultado_1_1">
+                                        <option value="">Selecciona...</option>
+                                        <option value="GANADO">GANADO</option>
+                                        <option value="PERDIDO">PERDIDO</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-greek btn-sm">Guardar y Sumar Stats</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- PARTIDO 2 -->
+                    <div class="match-card">
+                        <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-1">
+                            <span class="fw-bold"><i class="bi bi-clock me-1"></i> Partido 2 — 12/10/2026 - 19:30h</span>
+                            <select class="form-select form-select-sm w-auto" onchange="actualizarEstadoPartido(1, 2, this.value)">
+                                <option value="PENDIENTE">PENDIENTE</option>
+                                <option value="EN_JUEGO">EN_JUEGO</option>
+                                <option value="FINALIZADO">FINALIZADO</option>
+                                <option value="APLAZADO">APLAZADO</option>
+                                <option value="NO_PRESENTADO">NO_PRESENTADO</option>
+                            </select>
+                        </div>
+                        <div class="small text-muted">David Gómez / Juan López vs Rival por definir</div>
+                    </div>
+
+                    <!-- PARTIDO 3 -->
+                    <div class="match-card">
+                        <div class="d-flex justify-content-between align-items-center mb-2 border-bottom pb-1">
+                            <span class="fw-bold"><i class="bi bi-clock me-1"></i> Partido 3 — 13/10/2026 - 11:00h</span>
+                            <select class="form-select form-select-sm w-auto" onchange="actualizarEstadoPartido(1, 3, this.value)">
+                                <option value="PENDIENTE">PENDIENTE</option>
+                                <option value="EN_JUEGO">EN_JUEGO</option>
+                                <option value="FINALIZADO">FINALIZADO</option>
+                                <option value="APLAZADO">APLAZADO</option>
+                                <option value="NO_PRESENTADO">NO_PRESENTADO</option>
+                            </select>
+                        </div>
+                        <div class="small text-muted">Miguel Torres / Roberto Díaz vs Rival por definir</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Scripts enlace a los JS -->
+<script src="/js/auth.js"></script>
 <script src="/js/api.js"></script>
-<script src="/js/jornadas.js"></script>
 </body>
 </html>

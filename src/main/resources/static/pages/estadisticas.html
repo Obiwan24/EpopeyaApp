@@ -3,38 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadísticas</title>
-    <link rel="stylesheet" href="/pages/style.css">
+    <title>Estadísticas de Jugadores - EpopeyApp</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="estadisticas.css">
 </head>
 <body>
 
-<header class="cabecera">
-    <div class="titulo">
-        <button class="icono-btn" onclick="history.back()">←</button>
-        <img src="/assets/img/logo.png" class="logo" alt="Logo">
-        <span>Estadísticas</span>
+<!-- CABECERA -->
+<header class="greek-header d-flex justify-content-between align-items-center">
+    <a href="principal.html" class="header-icon-btn" title="Volver al Menú Principal">
+        <i class="bi bi-arrow-left fs-4"></i>
+    </a>
+    <div class="text-center">
+        <img src="../assets/img/logo.jpeg" alt="Logo Equipo" class="header-logo">
     </div>
-    <button class="icono-btn" onclick="location.href='/pages/perfil.html'">👤</button>
+    <a href="perfil.html" class="header-icon-btn" title="Mi Perfil">
+        <i class="bi bi-person-circle fs-4"></i>
+    </a>
 </header>
 
-<main>
-    <table style="width:100%; border-collapse:collapse;" id="tabla-estadisticas">
-        <thead>
-        <tr style="text-align:left; border-bottom:2px solid var(--color-borde);">
-            <th style="padding:8px;">Jugador</th>
-            <th>Disp.</th>
-            <th>Conv.</th>
-            <th>Ganados</th>
-            <th>Perdidos</th>
-            <th>Sets</th>
-            <th>Juegos</th>
-        </tr>
-        </thead>
-        <tbody id="cuerpo-estadisticas"></tbody>
-    </table>
+<main class="stats-container">
+
+    <h3 class="text-white font-cinzel mb-3" style="font-family:'Cinzel';">Estadísticas del Equipo</h3>
+
+    <!-- CONTROL SUPERIOR DE ORDENACIÓN -->
+    <div class="filter-card d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+        <label for="selectOrden" class="fw-bold font-cinzel text-dark m-0">
+            <i class="bi bi-sort-down me-1"></i> Ordenar clasificación por:
+        </label>
+        <select id="selectOrden" class="form-select form-select-sm w-auto" onchange="ordenarEstadisticas()">
+            <option value="partidosGanados">Partidos Ganados</option>
+            <option value="disponibles">Veces Disponibles</option>
+            <option value="convocados">Veces Convocados</option>
+        </select>
+    </div>
+
+    <!-- TABLA DE ESTADÍSTICAS -->
+    <div class="stats-table-card table-responsive">
+        <table class="table table-greek align-middle text-center">
+            <thead>
+            <tr>
+                <th class="text-start">Pos</th>
+                <th class="text-start">Jugador</th>
+                <th title="Veces Disponibles"><i class="bi bi-check-circle me-1"></i>Disp.</th>
+                <th title="Veces Convocados"><i class="bi bi-person-check me-1"></i>Conv.</th>
+                <th title="Partidos Ganados" class="text-success"><i class="bi bi-trophy me-1"></i>PG</th>
+                <th title="Partidos Perdidos" class="text-danger"><i class="bi bi-x-circle me-1"></i>PP</th>
+                <th title="Sets Ganados / Perdidos"><i class="bi bi-layers me-1"></i>Sets</th>
+                <th title="Juegos Ganados / Perdidos"><i class="bi bi-grid-3x3 me-1"></i>Juegos</th>
+            </tr>
+            </thead>
+            <tbody id="tablaStatsBody">
+            <!-- Filas generadas dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+
 </main>
 
-<script src="/js/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Scripts enlace a los JS -->
 <script src="/js/estadisticas.js"></script>
+<script src="/js/api.js"></script>
 </body>
 </html>

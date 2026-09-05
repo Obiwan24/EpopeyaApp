@@ -1,0 +1,135 @@
+body {
+    font-family: 'Lato', sans-serif;
+    background: #1a1612 url('../assets/img/fondo.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding-bottom: 40px;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(20, 16, 12, 0.6);
+    z-index: 0;
+}
+
+.greek-header {
+    position: relative;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(35, 28, 20, 0.95) 0%, rgba(20, 16, 12, 0.85) 100%);
+    border-bottom: 2px solid #c5a059;
+    padding: 0.75rem 1.5rem;
+}
+
+.header-icon-btn {
+    background: transparent;
+    border: 1px solid #c5a059;
+    color: #c5a059;
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.header-icon-btn:hover { background: #c5a059; color: #1a1612; }
+.header-logo { max-height: 55px; border-radius: 50%; border: 2px solid #c5a059; background: #fff; padding: 2px; }
+
+.jornadas-container {
+    position: relative;
+    z-index: 1;
+    max-width: 850px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* ESTADOS DE COLOR DE LA JORNADA */
+.jornada-item {
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+}
+
+.jornada-header-btn {
+    width: 100%;
+    text-align: left;
+    padding: 1.2rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Estado Pendiente (Por defecto) */
+.estado-pendiente .jornada-header-btn {
+    background: rgba(253, 250, 243, 0.95);
+    border: 2px solid #c5a059;
+    color: #2b2118;
+}
+
+/* Estado En Juego (Verde) */
+.estado-en-juego .jornada-header-btn {
+    background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    border: 2px solid #25c974;
+    color: #ffffff;
+}
+
+/* Estado Aplazado (Amarillo) */
+.estado-aplazado .jornada-header-btn {
+    background: linear-gradient(135deg, #ffc107 0%, #d39e00 100%);
+    border: 2px solid #ffe082;
+    color: #000000;
+}
+
+/* Estado Finalizado (Oscuro) */
+.estado-finalizado .jornada-header-btn {
+    background: linear-gradient(135deg, #2b2621 0%, #1c1815 100%);
+    border: 2px solid #6c757d;
+    color: #e0e0e0;
+}
+
+.jornada-body {
+    background: rgba(253, 250, 243, 0.98);
+    border: 2px solid #c5a059;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 1.5rem;
+    color: #2b2118;
+}
+
+.match-card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid #d5c39e;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.score-input {
+    width: 45px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.btn-greek {
+    background: linear-gradient(135deg, #c5a059 0%, #9e7a37 100%);
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+}
+
+.btn-greek:hover {
+    background: linear-gradient(135deg, #d4af66 0%, #ad8741 100%);
+    color: #fff;
+}

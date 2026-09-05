@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso - Olimpo App</title>
+    <title>Acceso - EpopeyaApp</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -230,69 +230,10 @@
         </div>
     </div>
 </div>
-
-<!-- Scripts de Bootstrap y Lógica JS -->
+<!-- Scripts de Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    // Verificación inicial: Si el usuario activó "Recordar", pasa a principal.html
-    document.addEventListener('DOMContentLoaded', () => {
-        if (localStorage.getItem('rememberUser') === 'true') {
-            window.location.href = 'principal.html';
-        }
-    });
-
-    // Evento al pulsar "ENTRAR"
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const user = document.getElementById('usuario').value;
-        const pass = document.getElementById('password').value;
-        const remember = document.getElementById('rememberMe').checked;
-
-        // Petición al Backend de Spring Boot para validar las credenciales
-        fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ usuario: user, password: pass })
-        })
-            .then(res => {
-                if (res.ok) {
-                    if (remember) {
-                        localStorage.setItem('rememberUser', 'true');
-                    }
-                    window.location.href = 'principal.html';
-                } else {
-                    alert('Usuario o contraseña incorrectos.');
-                }
-            })
-            .catch(() => {
-                // Si aún no tienes conectado el backend de Spring Boot, permite la entrada para probar la interfaz
-                if (remember) localStorage.setItem('rememberUser', 'true');
-                window.location.href = 'principal.html';
-            });
-    });
-
-    // Evento al pulsar "RECUPERAR CONTRASEÑA" en la ventana emergente
-    document.getElementById('recoverForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const user = document.getElementById('recoverUser').value;
-        const email = document.getElementById('recoverEmail').value;
-
-        // Envío al Backend de Spring Boot para validar la coincidencia del email y enviar el correo
-        fetch('/api/auth/recover-password', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ usuario: user, email: email })
-        })
-            .then(res => {
-                alert('Si el correo coincide con el usuario introducido, recibirás un enlace de recuperación.');
-                bootstrap.Modal.getInstance(document.getElementById('recoverModal')).hide();
-            })
-            .catch(() => {
-                alert('Solicitud enviada. Revisa tu correo electrónico.');
-                bootstrap.Modal.getInstance(document.getElementById('recoverModal')).hide();
-            });
-    });
-</script>
+<!-- Scripts enlace a los JS -->
+<script src="/js/auth.js"></script>
+<script src="/js/api.js"></script>
 </body>
 </html>
