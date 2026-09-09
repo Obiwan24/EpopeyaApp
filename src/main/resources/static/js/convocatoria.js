@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     //Confirma la sustitucion del jugador
-    window.confirmarSustitucion = async function () {
+    window.confirmarSustituto = async function () {
         const partidoId = document.getElementById("modalPartidoId").value;
         const slot = document.getElementById("modalSlot").value;
         const nuevoJugadorId = document.getElementById("selectSustituto").value;
@@ -168,8 +168,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             try {
                 const payload = {};
-                if (slot == 1) payload.jugador1Id = nuevoJugadorId || null;
-                if (slot == 2) payload.jugador2Id = nuevoJugadorId || null;
+                if (slot === 1) payload.jugador1Id = nuevoJugadorId || null;
+                if (slot === 2) payload.jugador2Id = nuevoJugadorId || null;
 
                 await apiFetch(`/convocatorias/partidos/${partidoId}`, {
                     method: "PUT",

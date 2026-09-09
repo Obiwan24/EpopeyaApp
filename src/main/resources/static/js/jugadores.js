@@ -3,26 +3,26 @@
  */
 
 let modalCrearInstance = null;
-let modalDetalleInsance = null;
+let modalDetalleInstance = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     exigirSesion();
 
     const usuario = getUsuarioActual();
-    const esCapitan = usuario && usuario.rol == "CAPITAN";
+    const esCapitan = usuario && usuario.rol === "CAPITAN";
 
     // Inicializar modales de Bootstrap 5
     const elModalCrear = document.getElementById("modalCrearJugador");
-    if (elModalCrear) modalCrearInsance = new bootstrap.Modal(elModalCrear);
+    if (elModalCrear) modalCrearInstance = new bootstrap.Modal(elModalCrear);
 
     const elModalDetalle = document.getElementById("modaDetalleJugador");
-    if (elModalDetalle) modalDetalleInsance = new bootstrap.Modal(elModalDetalle);
+    if (elModalDetalle) modalDetalleInstance = new bootstrap.Modal(elModalDetalle);
 
 // Ajustes visuales segun ROL
     const btnNuevoJugador = document.getElementById("btnNuevoJugador");
     if (btnNuevoJugador) {
         if (!esCapitan) {
-            btnNuevoJugador.class.add(d - none);
+            btnNuevoJugador.class.add("d-none");
         } else {
             btnNuevoJugador.addEventListener("click", () => {
                 document.getElementById("formCrearJugador").reset();
@@ -101,7 +101,7 @@ async function cargarJugadores() {
                 `;
             div.querySelector(".btn-ver").addEventListener("click", () => abrirModalDetalle(j));
             if (esCapitan){
-                div.querySelector(".btn-borrar")-addEventListener("click", () => borrarJugador(j.id));
+                div.querySelector(".btn-borrar").addEventListener("click", () => borrarJugador(j.id));
             }
 
             listaEl.appendChild(div)
@@ -175,7 +175,7 @@ function abrirModalDetalle(j) {
     document.getElementById("editEmail").value = j.email || "";
 
     // Bloquear campos por defecto
-    deshabilitarModificaciones();
+    deshabilitarModificacion();
 
     const usuarioActual = getUsuarioActual();
     const btnHabilitar = document.getElementById("btnHabilitarEdicion");
@@ -187,7 +187,7 @@ function abrirModalDetalle(j) {
         }
     }
 
-    if (modalDetalleInsance) modalDetalleInsance.show();
+    if (modalDetalleInstance) modalDetalleInstance.show();
 }
 
 /**
@@ -234,7 +234,7 @@ window.guardarCambiosJugador = async  function(e) {
     }
     try {
         await apiFetch(`/usuarios/${id}`, {method: "PUT", body: payload });
-        if (modalDetalleInsance) modalDetalleInsance.hide();
+        if (modalDetalleInstance) modalDetalleInstance.hide();
         cargarJugadores();
     }catch (err) {
         alert("Error al actualizar usuario: " + err.message);
