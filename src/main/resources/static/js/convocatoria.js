@@ -5,133 +5,243 @@
  *   y una casilla para que cada jugador confirme su propia convocatoria.
  * - El capitán puede publicar/editar la convocatoria (elegir jugadores por partido).
  */
+let modalModificarInstance = null;
+let modalNuevaJornadaInstance = null;
+let listaUsuariosGlobal = [];
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     exigirSesion();
     const usuario = getUsuarioActual();
-    const listaEl = document.getElementById("lista-convocatoria");
+    const btnNuevaJornada = document.getElementById("btnNuevaJornada");
 
-    if (usuario.rol === "CAPITAN") {
-        document.getElementById("btn-nueva-jornada").classList.remove("oculto");
-        document.getElementById("btn-nueva-jornada").addEventListener("click", () => {
-            irA("jornadas.html");
-        });
+    //Inicializa instancias de Bootstrap modals
+    const elModalModificar = document.getElementById("modalModificarJugador");
+    if (elModalModificar) modalModificarInstance = new bootstrap.Modal(elModalModificar);
+
+    const elModalNueva = document.getElementById("modalNuevaJornada");
+    if (elModalNueva) modalNuevaJornadaInstance = new bootstrap.Modal(elModalNueva);
+
+    // Cargar lista de jugadores para desplegables si es capitan
+    if (usuario && usuario.rol === "CAPITAN") {
+        if (btnNuevaJornada) btnNuevaJornada.classList.remove("d-none");
+        await cargarJugadoresEnModales();
     }
 
-    async function cargarLista() {
-        listaEl.innerHTML = "Cargando...";
+    // Event listener para formulario de crear jornada
+    const formNuevaJornada = document.getElementById("formNuevaJornada");
+    if (formNuevaJornada) {
+        formNuevaJornada.addEventListener("submit", guardarNuevaJornada);
+    }
+
+    //Cargar convocatorias desde el Backend
+    cargarJornadas();
+});
+
+    // Carga el combo de usuarios en el modal de alta de jornada y en el de modificacion
+    async function cargarJugadoresEnModales() {
+        try {
+            listaUsuariosGlobal = await apiFetch("/usuarios");
+            const combosModal = document.querySelectorAll(".select-jugador-modal, #selectSustituto");
+
+            combosModal.forEach(select => {
+                select.innerHTML = '<option value="">-- Seleccionar Jugador --</option>';
+                listaUsuariosGlobal.forEach(u => {
+                    const opt = document.createElement("option");
+                    opt.value = u.id;
+                    opt.textContent = `${u.nombre} ${u.apellidos}`;
+                    select.appendChild(opt);
+                });
+            });
+        } catch (err) {
+            console.error("Error al cargar la lista de usuarios:", err.mesasage);
+        }
+    }
+
+    // Cargar las jornadas y sus convocados
+
+    async function cargarJornadas() {
+        const listaEl = document.getElementById("listaJornadas");
+        if (!listaEl) return;
+
         try {
             const jornadas = await apiFetch("/jornadas");
-            listaEl.innerHTML = "";
+            if (!jornadas || jornadas.length === 0) return;
 
-            jornadas.forEach(j => {
-                const div = document.createElement("div");
-                div.className = "tarjeta lista-item";
-                div.style.cursor = "pointer";
-                div.innerHTML = `
-                    <div><strong>Jornada ${j.numero} - vs ${j.rival}</strong></div>
-                    ${usuario.rol === "CAPITAN" ? `
-                    <div class="acciones-fila">
-                        <button class="btn secundario btn-editar">Editar convocatoria</button>
-                    </div>` : ""}
-                `;
-                if (usuario.rol === "CAPITAN") {
-                    div.querySelector(".btn-editar").addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        mostrarDetalle(j);
+            listaEl.innerHTML = "";
+            const usuario = getUsuarioActual();
+
+            for (const j of jornadas) {
+                const partidos = await apiFetch(`/convocatorias/jornadas/${j.id}`);
+
+                const card = document.createElement("div");
+                card.className = `jornada-card estado-${j.estado ? j.estado.toLowerCase() : 'activa'}`;
+
+                let htmlPartidos = "";
+                if (partidos && partidos.length > 0) {
+                    partidos.forEach(p => {
+                        const conv = p.convocatoria || {};
+                        const j1 = conv.jugador1;
+                        const j2 = conv.jugador2;
+
+                        htmlPartidos += `
+                        <div class="match-box">
+                            <div class="fw-bold mb-1">
+                                <i class="bi bi-calendar3 me-1"></i> Partido ${p.numeroPartido} — ${p.fechaHora ? new Date(p.fechaHora).toLocaleString() : 'Fecha por confirmar'} (${p.lugar || 'Lugar TBD'})
+                            </div>
+                            <div class="ps-2">
+                                <!-- Jugador 1 -->
+                                <div class="player-row">
+                                    <span><i class="bi bi-person"></i> ${j1 ? `${j1.nombre} ${j1.apellidos}` : '<em>Sin asignar</em>'}</span>
+                                    <div>
+                                        ${j1 ? `
+                                            <input type="checkbox" class="form-check-input me-1" ${conv.confirmadoJugador1 ? 'checked disabled' : ''} onchange="confirmarConvocatoria('${conv.id}', 1, this)">
+                                            <label class="small me-2">${conv.confirmadoJugador1 ? 'Confirmado' : 'Confirmar'}</label>
+                                        ` : ''}
+                                        ${usuario.rol === 'CAPITAN' ? `
+                                            <button class="btn btn-sm btn-outline-secondary py-0 captain-only" onclick="abrirModalModificar('${j1 ? j1.nombre + ' ' + j1.apellidos : 'Sin Asignar'}', '${p.id}', 1, '${j1 ? j1.id : ''}')">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                <!-- Jugador 2 -->
+                                <div class="player-row">
+                                    <span><i class="bi bi-person"></i> ${j2 ? `${j2.nombre} ${j2.apellidos}` : '<em>Sin asignar</em>'}</span>
+                                    <div>
+                                        ${j2 ? `
+                                            <input type="checkbox" class="form-check-input me-1" ${conv.confirmadoJugador2 ? 'checked disabled' : ''} onchange="confirmarConvocatoria('${conv.id}', 2, this)">
+                                            <label class="small me-2">${conv.confirmadoJugador2 ? 'Confirmado' : 'Confirmar'}</label>
+                                        ` : ''}
+                                        ${usuario.rol === 'CAPITAN' ? `
+                                            <button class="btn btn-sm btn-outline-secondary py-0 captain-only" onclick="abrirModalModificar('${j2 ? j2.nombre + ' ' + j2.apellidos : 'Sin Asignar'}', '${p.id}', 2, '${j2 ? j2.id : ''}')">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
                     });
                 }
-                div.addEventListener("click", () => mostrarDetalle(j));
-                listaEl.appendChild(div);
-            });
+
+                card.innerHTML = `
+                <div class="jornada-title d-flex justify-content-between align-items-center">
+                    <span>${j.equipoLocal || 'EPOPEYA'} vs ${j.rival || j.equipoVisitante}</span>
+                    <span class="badge ${j.estado === 'FINALIZADA' ? 'bg-secondary' : j.estado === 'APLAZADA' ? 'bg-warning text-dark' : 'bg-warning text-dark'}">${j.estado || 'Pendiente'}</span>
+                </div>
+                ${htmlPartidos}
+            `;
+
+                listaEl.appendChild(card);
+            }
         } catch (err) {
-            listaEl.innerHTML = `<p class="error-msg">${err.message}</p>`;
+            console.warn("No se pudieron cargar las jornadas del backend, manteniendo vista estática si existe:", err.message);
         }
     }
 
-    async function mostrarDetalle(jornada) {
-        const cont = document.getElementById("detalle-convocatoria");
-        cont.classList.remove("oculto");
-        cont.innerHTML = "Cargando...";
+    // Abre el modal para editar/sustituir convocados
+    window.abrirModalModificar = function (nombreJugador, partidoId, slot, jugadorId) {
+        document.getElementById("nombreJugadorModificar").textContent = nombreJugador;
+        document.getElementById("modalPartidoId").value = partidoId || "";
+        document.getElementById("modalSlot").value = slot || "";
 
-        try {
-            const partidos = await apiFetch(`/convocatorias/jornadas/${jornada.id}`);
-            let jugadoresEquipo = [];
-            if (usuario.rol === "CAPITAN") {
-                jugadoresEquipo = await apiFetch("/usuarios");
+        const select = document.getElementById("selectSustituto");
+        if (select) select.value = jugadorId || "";
+
+        if (modalModificarInstance) {
+            modalModificarInstance.show();
+        }
+    };
+
+    //Confirma la sustitucion del jugador
+    window.confirmarSustitucion = async function () {
+        const partidoId = document.getElementById("modalPartidoId").value;
+        const slot = document.getElementById("modalSlot").value;
+        const nuevoJugadorId = document.getElementById("selectSustituto").value;
+
+            if (!partidoId) {
+                alert("Modificación realizada visualmente.");
+                if (modalModificarInstance) modalModificarInstance.hide();
+                return;
             }
 
-            let html = `<div class="tarjeta"><h3>Jornada ${jornada.numero} vs ${jornada.rival}</h3>`;
+            try {
+                const payload = {};
+                if (slot == 1) payload.jugador1Id = nuevoJugadorId || null;
+                if (slot == 2) payload.jugador2Id = nuevoJugadorId || null;
 
-            partidos.forEach(p => {
-                const conv = p.convocatoria;
-                html += `<div class="partido-item">
-                    <strong>Partido ${p.numeroPartido}</strong> - ${p.lugar || "Lugar por confirmar"} - ${p.fechaHora ? new Date(p.fechaHora).toLocaleString() : "Fecha por confirmar"}`;
-
-                if (usuario.rol === "CAPITAN") {
-                    html += `<div style="margin-top:8px;">
-                        <label>Jugador 1</label>
-                        <select data-partido="${p.id}" data-slot="1" class="select-convocado">
-                            <option value="">-- Sin convocar --</option>
-                            ${jugadoresEquipo.map(j => `<option value="${j.id}" ${conv && conv.jugador1 && conv.jugador1.id === j.id ? "selected" : ""}>${j.nombre} ${j.apellidos}</option>`).join("")}
-                        </select>
-                        <label>Jugador 2</label>
-                        <select data-partido="${p.id}" data-slot="2" class="select-convocado">
-                            <option value="">-- Sin convocar --</option>
-                            ${jugadoresEquipo.map(j => `<option value="${j.id}" ${conv && conv.jugador2 && conv.jugador2.id === j.id ? "selected" : ""}>${j.nombre} ${j.apellidos}</option>`).join("")}
-                        </select>
-                        <button class="btn acento" data-guardar="${p.id}" style="margin-top:8px;">Guardar convocatoria</button>
-                    </div>`;
-                } else if (conv) {
-                    const soyJ1 = conv.jugador1 && conv.jugador1.id === usuario.id;
-                    const soyJ2 = conv.jugador2 && conv.jugador2.id === usuario.id;
-                    html += `<p style="margin-top:8px;">
-                        ${conv.jugador1 ? `☑ ${conv.jugador1.nombre} ${conv.jugador1.apellidos} ${conv.confirmadoJugador1 ? "(confirmado)" : "(pendiente)"}` : "Sin asignar"}<br>
-                        ${conv.jugador2 ? `☑ ${conv.jugador2.nombre} ${conv.jugador2.apellidos} ${conv.confirmadoJugador2 ? "(confirmado)" : "(pendiente)"}` : "Sin asignar"}
-                    </p>`;
-                    if (soyJ1 && !conv.confirmadoJugador1) {
-                        html += `<button class="btn" data-confirmar="${conv.id}" data-slot="1">Confirmar mi convocatoria</button>`;
-                    }
-                    if (soyJ2 && !conv.confirmadoJugador2) {
-                        html += `<button class="btn" data-confirmar="${conv.id}" data-slot="2">Confirmar mi convocatoria</button>`;
-                    }
-                } else {
-                    html += `<p>Convocatoria aún no publicada</p>`;
-                }
-
-                html += `</div>`;
-            });
-            html += `</div>`;
-            cont.innerHTML = html;
-
-            cont.querySelectorAll("[data-guardar]").forEach(btn => {
-                btn.addEventListener("click", async () => {
-                    const partidoId = btn.dataset.guardar;
-                    const sel1 = cont.querySelector(`select[data-partido="${partidoId}"][data-slot="1"]`).value;
-                    const sel2 = cont.querySelector(`select[data-partido="${partidoId}"][data-slot="2"]`).value;
-                    try {
-                        await apiFetch(`/convocatorias/partidos/${partidoId}`, {
-                            method: "PUT",
-                            body: { jugador1Id: sel1 || null, jugador2Id: sel2 || null }
-                        });
-                        mostrarDetalle(jornada);
-                    } catch (err) { alert(err.message); }
+                await apiFetch(`/convocatorias/partidos/${partidoId}`, {
+                    method: "PUT",
+                    body: payload
                 });
-            });
 
-            cont.querySelectorAll("[data-confirmar]").forEach(btn => {
-                btn.addEventListener("click", async () => {
-                    try {
-                        await apiFetch(`/convocatorias/${btn.dataset.confirmar}/confirmar?slot=${btn.dataset.slot}`, { method: "PUT" });
-                        mostrarDetalle(jornada);
-                    } catch (err) { alert(err.message); }
+                if (modalModificarInstance) modalModificarInstance.hide();
+                cargarJornadas();
+            } catch (err) {
+                alert(err.message);
+            }
+        };
+
+        //Desconvocar al jugador actual
+        window.desconvocarJugador = async function () {
+            document.getElementById("selectSustituto").value = "";
+            await confirmarSustitucion();
+        };
+
+        //Confirmación individual de convocatoria por checkbox
+        window.confirmarConvocatoria = async function (convocatoriaId, slot, checkbox) {
+            if (!convocatoriaId) return;
+            try {
+                await apiFetch(`/convocatorias/${convocatoriaId}/confirmar?slot=${slot}`, {method: "PUT"});
+                checkbox.disabled = true;
+            } catch (err) {
+                checkbox.checked = false;
+                alert(err.message);
+            }
+        };
+
+        // Guarda la nueva jornada creando sus 3 partidos y asignando convicados directamente
+        async function guardarNuevaJornada(e) {
+            e.preventDefault();
+
+            const payload = {
+                numero: document.getElementById("numeroJornada").value,
+                equipoLocal: document.getElementById("equipoLocal").value,
+                rival: document.getElementById("equipoRival").value,
+                partidos: [
+                    {
+                        numeroPartido: 1,
+                        fechaHora: `${document.getElementById("p1-fecha").value}T${document.getElementById("p1-hora").value}`,
+                        lugar: document.getElementById("p1-lugar").value,
+                        jugador1Id: document.getElementById("p1-j1").value || null,
+                        jugador2Id: document.getElementById("p1-j2").value || null
+                    },
+                    {
+                        numeroPartido: 2,
+                        fechaHora: `${document.getElementById("p2-fecha").value}T${document.getElementById("p2-hora").value}`,
+                        lugar: document.getElementById("p2-lugar").value,
+                        jugador1Id: document.getElementById("p2-j1").value || null,
+                        jugador2Id: document.getElementById("p2-j2").value || null
+                    },
+                    {
+                        numeroPartido: 3,
+                        fechaHora: `${document.getElementById("p3-fecha").value}T${document.getElementById("p3-hora").value}`,
+                        lugar: document.getElementById("p3-lugar").value,
+                        jugador1Id: document.getElementById("p3-j1").value || null,
+                        jugador2Id: document.getElementById("p3-j2").value || null
+                    }
+                ]
+            };
+
+            try {
+                await apiFetch("/jornadas", {
+                    method: "POST",
+                    body: payload
                 });
-            });
-
-        } catch (err) {
-            cont.innerHTML = `<p class="error-msg">${err.message}</p>`;
+                if (modalNuevaJornadaInstance) modalNuevaJornadaInstance.hide();
+                cargarJornadas();
+            } catch (err) {
+                alert("Error al guardar la jornada: " + err.message);
+            }
         }
-    }
-
-    cargarLista();
-});
