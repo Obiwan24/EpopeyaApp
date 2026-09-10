@@ -1,6 +1,7 @@
 package com.example.epopeyaap.model.entity;
 
 import com.example.epopeyaap.enums.EstadoPartido;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ public class Partido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="jornada_id", nullable = false)
     private Jornada jornada;

@@ -25,6 +25,12 @@ public class Jornada {
     private Long id;
 
     @Column(nullable = false)
+    private Integer numero;
+
+    @Builder.Default
+    private String equipoLocal = "EPOPEYA";
+
+    @Column(nullable = false)
     private String rival;
 
     private LocalDate fechaInicioRango;
@@ -32,6 +38,9 @@ public class Jornada {
 
     //Fecha y hora elegida para jugar la jornada
     private LocalDateTime fechaHoraElegida;
+
+    // Limite para responder a encuesta de disponibilidad
+    private LocalDateTime fechaLimiteEncuesta;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
