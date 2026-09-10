@@ -34,7 +34,11 @@
     <!-- ENCABEZADO Y BOTÓN AÑADIR JUGADOR (Solo Capitán) -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="text-white font-cinzel m-0" style="font-family:'Cinzel';">Plantilla del Equipo</h3>
-        <button id="btnNuevoJugador" class="btn btn-greek" data-bs-toogle="modal" data-bs-target="modalNuevoJugador">
+        <!-- FIX: "data-bs-toogle" (typo) -> "data-bs-toggle", y el target apuntaba a un id
+             inexistente ("modalNuevoJugador") sin la almohadilla "#". El modal real se llama
+             "modalCrearJugador" (ver más abajo). Con el typo, Bootstrap nunca reconocía este
+             botón como disparador de modal y el clic no hacía absolutamente nada. -->
+        <button id="btnNuevoJugador" class="btn btn-greek" data-bs-toggle="modal" data-bs-target="#modalCrearJugador">
             <i class="bi bi-person-plus-fill me-1"></i> Añadir Jugador
         </button>
     </div>

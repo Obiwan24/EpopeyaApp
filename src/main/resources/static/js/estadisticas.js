@@ -3,6 +3,10 @@
  * Muestra las estadísticas de todos los jugadores.
  * Solo lectura para jugadores; el capitán podría editarlas manualmente
  * desde el listado de jugadores si el backend expone ese endpoint.
+ *
+ * FIX: el original leía "j.estadistica.setsGanados" (con "s"), pero el
+ * campo de la entidad EstadisticaJugador del backend se llama "setGanados"
+ * (sin "s"). Como nunca coincidían, esa columna siempre salía "undefined".
  */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <td>${j.estadistica.vecesConvocado}</td>
                     <td>${j.estadistica.partidosGanados}</td>
                     <td>${j.estadistica.partidosPerdidos}</td>
-                    <td>${j.estadistica.setsGanados}</td>
+                    <td>${j.estadistica.setGanados}</td>
                     <td>${j.estadistica.juegosGanados}</td>
                 `;
                 cuerpo.appendChild(tr);
