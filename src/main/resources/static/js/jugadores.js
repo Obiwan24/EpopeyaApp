@@ -233,7 +233,10 @@ function abrirModalDetalle(j) {
     document.getElementById("editUsername").value = j.username || "-";
     document.getElementById("editDni").value = j.dni || "";
     document.getElementById("editEdad").value = j.fechaNacimiento ? calcularEdad(j.fechaNacimiento) : "";
-    document.getElementById("editPosicion").value = j.posicion ? (j.posicion.charAt(0) + j.posicion.slice(1).toLowerCase()) : "DRIVE";
+    // FIX: el <option value="..."> del select ahora es el mismo texto que
+    // manda el backend (DRIVE/REVES/AMBOS en mayúsculas), así que se asigna
+    // directamente sin transformar mayúsculas/minúsculas.
+    document.getElementById("editPosicion").value = j.posicion || "DRIVE";
     document.getElementById("editTelefono").value = j.telefono || "";
     document.getElementById("editEmail").value = j.email || "";
 
