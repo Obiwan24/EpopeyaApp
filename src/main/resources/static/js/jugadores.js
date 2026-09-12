@@ -261,7 +261,7 @@ function abrirModalDetalle(j) {
 /**
  * Habilita la edición de los inputs en el modal detalle
  */
-window.habilitarModificaciones = function () {
+window.habilitarModificacion = function () {
     document.querySelectorAll(".edit-field").forEach(el => {
         el.removeAttribute("readonly");
         el.removeAttribute("disabled");
