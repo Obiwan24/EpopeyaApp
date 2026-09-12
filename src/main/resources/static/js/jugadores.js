@@ -202,6 +202,8 @@ async function crearJugador(e) {
     const anioNacimiento = new Date().getFullYear() - edadVal;
     const fechaNacimientoAprox = `${anioNacimiento}-01-01`;
 
+    // FIX: ya no se manda "rol" — el backend lo asigna siempre como
+    // JUGADOR y ya no acepta ese campo desde el cliente (por seguridad).
     const payload = {
         username: document.getElementById("nuevoUsername").value.trim(),
         password: dniVal, // Contraseña por defecto
@@ -211,8 +213,7 @@ async function crearJugador(e) {
         fechaNacimiento: fechaNacimientoAprox,
         posicion: document.getElementById("nuevaPosicion").value.toUpperCase(),
         telefono: document.getElementById("nuevoTelefono").value.trim(),
-        email: document.getElementById("nuevoEmail").value.trim(),
-        rol: "JUGADOR"
+        email: document.getElementById("nuevoEmail").value.trim()
     };
 
     try {
