@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Map;
 
@@ -25,6 +26,18 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    /**
+     * NUEVO: peticiones a recursos que simplemente no existen (el caso típico
+     * es el navegador pidiendo solo /favicon.ico, que este proyecto no tiene)
+     * son un 404 normal y esperable, no un fallo de la aplicación. Sin este
+     * handler específico, caían en manejarErrorInesperado() de abajo y se
+     * veían en el log/consola como un alarmante error 500.
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Void> manejarRecursoNoEncontrado(NoResourceFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, String>> manejarRuntimeException(RuntimeException e) {

@@ -50,7 +50,7 @@
             margin-top: -30px; /* Ligera elevación respecto al centro */
         }
 
-        /* Contenedor del Logo (assets/img/logo.jpg) */
+        /* Contenedor del Logo (assets/img/logo.jpeg) */
         .logo-container {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -196,6 +196,9 @@
                 </span>
         </div>
 
+        <!-- Hueco para mostrar mensajes de error del login -->
+        <div id="error-login" class="text-danger small mb-2"></div>
+
         <!-- 5. Botón Entrar -->
         <button type="submit" class="btn btn-greek">ENTRAR</button>
     </form>
@@ -221,6 +224,8 @@
                         <label for="recoverEmail" class="form-label">Email</label>
                         <input type="email" class="form-control" id="recoverEmail" placeholder="ejemplo@correo.com" required>
                     </div>
+                    <!-- Hueco para el mensaje de éxito/error de "recuperar contraseña" -->
+                    <div id="error-recuperar" class="small mb-2"></div>
                     <!-- Botón Recuperar Contraseña -->
                     <div class="mt-4">
                         <button type="submit" class="btn btn-greek">RECUPERAR CONTRASEÑA</button>
